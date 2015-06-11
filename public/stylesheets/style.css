@@ -1,8 +1,19 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-opacity: .5;
+  stroke-width: .5px;
 }
 
-a {
-  color: #00B7FF;
+.land {
+  //fill: #222;
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.boundary {
+  fill: none;
+  stroke: #222;
+  stroke-width: .5px;
 }
