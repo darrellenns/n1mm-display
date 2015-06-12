@@ -24,23 +24,6 @@ app.get('/', function (req, res) {
   res.render('index');
 });
 
-io.on('connection', function (socket) {
-	//initial data sent on client connect
-	socket.emit('news', { hello: 'world' });
-});
-
-//just an example of sending data to the client asynchronously
-var contactid=0;
-var testtimer= function () {
-	contactid+=1;
-	io.emit('newcontact', {
-		id:contactid,
-		coord:[Math.random()*(360)-180,Math.random()*(180)-90]
-	});
-	setTimeout(testtimer,Math.random()*3000);
-}
-testtimer();
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -70,4 +53,40 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+
+//database queries
+var sqlite3=require('sqlite3').verbose();
+var db=new sqlite3.Database("E:\\N1MM Logger+\\Databases\\ham.s3db");
+var dxlog=function(clause,callback){
+	db.each("SELECT strftime('%s',TS) as t,* from DXLOG "+clause,function(err,row){
+		if(err) throw(err);
+		row['id']=row.t+row.Call;
+		row.t=parseInt(row.t);
+		row['coord']=[Math.random()*(360)-180,Math.random()*(180)-90];
+		callback(row);
+	});
+}
+
+var seen=[];
+var polldb=function(){
+	//TODO: only grab the new entries
+	dxlog("",function(row){
+		if(seen.indexOf(row.id)==-1){
+			console.log("Contact: "+row.id);
+			seen.push(row.id);
+			io.emit('newcontact',row);
+		}
+	});
+	setTimeout(polldb,3000);
+}
+polldb();
+
+io.on('connection', function (socket) {
+	console.log("NEW CONNECTION");
+	socket.emit('news', { hello: 'world' });
+	dxlog("",function(row){
+		socket.emit('oldcontact',row);
+	});
 });
