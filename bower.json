@@ -1,0 +1,20 @@
+{
+  "name": "n1mm-display",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dack/n1mm-display",
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "topojson": "~1.6.19"
+  },
+  "devDependencies": {
+    "d3": "~3.5.5"
+  }
+}
