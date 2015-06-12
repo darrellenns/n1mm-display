@@ -6,10 +6,10 @@ socket.on('news', function (data) {
 var gpsHome=[-122.807727,49.2480338];
 
 var width = 1600,
-		height = 1000;
+		height = 1600;
 
 var projection = d3.geo.mercator()
-	.center([0,10])
+	.center([0,-40])
 		.scale((width + 1) / 2 / Math.PI)
 		.translate([width / 2, height / 2])
 		.precision(.1);
