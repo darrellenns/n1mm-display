@@ -8,12 +8,19 @@
 .land {
   //fill: #222;
   fill: none;
-  stroke: #000;
-  stroke-width: 1px;
+  stroke: #fff;
+  stroke-width: 0.5px;
 }
 
 .boundary {
   fill: none;
-  stroke: #222;
+  stroke: #777;
   stroke-width: .5px;
+}
+
+body {
+	background:black;
+	color: #777;
+	margin: 0;
+	padding: 0;
 }
