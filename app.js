@@ -71,10 +71,9 @@ var dxlog=function(clause,callback){
 
 var seen=[];
 var polldb=function(){
-	//TODO: only grab the new entries
 	dxlog("",function(row){
 		if(seen.indexOf(row.id)==-1){
-			console.log("Contact: "+row.id);
+			console.log("New Contact: "+row.id);
 			seen.push(row.id);
 			io.emit('newcontact',row);
 		}
@@ -84,8 +83,7 @@ var polldb=function(){
 polldb();
 
 io.on('connection', function (socket) {
-	console.log("NEW CONNECTION");
-	socket.emit('news', { hello: 'world' });
+	console.log("New socket.io connection");
 	dxlog("",function(row){
 		socket.emit('oldcontact',row);
 	});

@@ -41,7 +41,6 @@ d3.json("data/us-10m.json",function(error,us){
 			.datum(topojson.mesh(us, us.objects.states))
 			.attr("class", "boundary")
 			.attr("d", path);
-	console.log(us);
 });
 
 d3.json("data/world-50m.json", function(error, world) {
@@ -62,45 +61,29 @@ d3.json("data/world-50m.json", function(error, world) {
 
 var contact=[];
 
-socket.on('news',function(data){
-	console.log(data);
-});
-
 socket.on('connect',function(){
-	console.log("RECONNECTED");
 	contact=[];//erase all contacts (out of data information)
 	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 	points.exit().remove();
-	console.log("REMOVED ALL");
 });
 
 socket.on('oldcontact', function (data) {
-	var exists=false;
-	for(var i=0;i<contact.length;i++){
-		if(contact[i].id==data.id){
-			exists=true;
-			break;
-		}
-	}
-	if(exists==false){
-		console.log("ADD "+data.id);
-		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
-		points.remove();
-		contact.push(data);
-		points.enter().append("circle")
-			.attr("cx", function (d) { return projection(d.coord)[0]; })
-			.attr("cy", function (d) { return projection(d.coord)[1]; })
-			.attr("class","contact old")
-			.style("fill-opacity", 1e-6)
-			.attr("r","100px")
-			.attr("fill","white")
-			.transition()
-				.duration(3000)
-				.style("r","3px")
-				.style("fill-opacity", 1)
-				.attr("fill", "teal")
-				.attr("class","contact old complete");
-	}
+	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
+	points.remove();
+	contact.push(data);
+	points.enter().append("circle")
+		.attr("cx", function (d) { return projection(d.coord)[0]; })
+		.attr("cy", function (d) { return projection(d.coord)[1]; })
+		.attr("class","contact old")
+		.style("fill-opacity", 1e-6)
+		.attr("r","100px")
+		.attr("fill","white")
+		.transition()
+			.duration(3000)
+			.style("r","3px")
+			.style("fill-opacity", 1)
+			.attr("fill", "teal")
+			.attr("class","contact old complete");
 });
 
 socket.on('newcontact', function (data) {
