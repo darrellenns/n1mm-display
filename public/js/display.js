@@ -1,7 +1,4 @@
 var socket = io();
-socket.on('news', function (data) {
-	console.log(data);
-});
 
 var gpsHome=[-122.807727,49.2480338];
 
@@ -58,19 +55,38 @@ d3.json("data/world-50m.json", function(error, world) {
 			.attr("class", "boundary")
 			.attr("d", path);
 
-	// points
-    aa = [-123.120700, 49.282700];
-	bb = [-122.389809, 37.72728];
-	var gpsPoints=new Array(10);
-	for(var i=0;i<gpsPoints.length;i++){
-		gpsPoints[i]=[Math.random()*(360)-180,Math.random()*(180)-90];
-	}
-	console.log(gpsPoints);
-	// add circles to svg
-    svg.selectAll("circle")
-		.data(gpsPoints).enter().append("circle")
-			.attr("cx", function (d) { return projection(d)[0]; })
-			.attr("cy", function (d) { return projection(d)[1]; })
+});
+
+// points
+var gpsPoints=new Array(10);
+for(var i=0;i<gpsPoints.length;i++){
+	gpsPoints[i]=[Math.random()*(360)-180,Math.random()*(180)-90];
+}
+var contact=[];
+socket.on('newcontact', function (data) {
+	contact.push(data);
+
+	var points=svg.selectAll("circle.contact").data(contact);
+	var lines=svg.selectAll("line.contact").data([data]);
+	//#TODO: apply classes object, and filter based on them
+	//
+	
+	//TODO: deal with overlapping transitions
+	points
+		.transition()
+			.duration(1000)
+			.style("r","5px")
+			.attr("fill", "orange")
+			.style("fill-opacity", 1)
+		.transition()
+			.duration(1000)
+			.style("r","2px")
+			.attr("fill", "teal");
+
+	points.enter().append("circle")
+			.attr("class","contact")
+			.attr("cx", function (d) { return projection(d.coord)[0]; })
+			.attr("cy", function (d) { return projection(d.coord)[1]; })
 			.style("fill-opacity", 1e-6)
 			.attr("r","100px")
 			.attr("fill","white")
@@ -78,32 +94,28 @@ d3.json("data/world-50m.json", function(error, world) {
 			.delay(300)
 			.duration(1000)
 			.attr("r", "5px")
-			.attr("fill", "teal")
-			.style("fill-opacity", 1)
-		.transition()
-			.delay(5000)
-			.duration(1000)
-			.style("r","2px");
+			.attr("fill", "red")
+			.style("fill-opacity", 1);
 
-	//shooting lines
-    svg.selectAll("line")
-		.data(gpsPoints).enter().append("line")
-			.attr("x1", projection(gpsHome)[0])
-			.attr("y1", projection(gpsHome)[1])
-			.attr("x2", projection(gpsHome)[0])
-			.attr("y2", projection(gpsHome)[1])
-			.attr("stroke","red")
-		.transition()
-			.duration(300)
-			.ease("linear")
-			.attr("x2", function (d) { return projection(d)[0]; })
-			.attr("y2", function (d) { return projection(d)[1]; })
-		.transition()
-			.duration(300)
-			.ease("linear")
-			.attr("x1", function (d) { return projection(d)[0]; })
-			.attr("y1", function (d) { return projection(d)[1]; })
-			.remove();
+	lines.enter().append("line")
+		.attr("class","contact")
+		.attr("x1", projection(gpsHome)[0])
+		.attr("y1", projection(gpsHome)[1])
+		.attr("x2", projection(gpsHome)[0])
+		.attr("y2", projection(gpsHome)[1])
+		.attr("stroke","red")
+	.transition()
+		.duration(300)
+		.ease("linear")
+		.attr("x2", function (d) { return projection(d.coord)[0]; })
+		.attr("y2", function (d) { return projection(d.coord)[1]; })
+	.transition()
+		.duration(300)
+		.ease("linear")
+		.attr("x1", function (d) { return projection(d.coord)[0]; })
+		.attr("y1", function (d) { return projection(d.coord)[1]; })
+		.remove();
+
 });
 
 

@@ -29,14 +29,14 @@ io.on('connection', function (socket) {
 	socket.emit('news', { hello: 'world' });
 });
 
-/*
 //just an example of sending data to the client asynchronously
 var testtimer= function () {
-	io.emit('news', { hello: 'second' });
-	setTimeout(testtimer,1000);
+	io.emit('newcontact', {
+		coord:[Math.random()*(360)-180,Math.random()*(180)-90]
+	});
+	setTimeout(testtimer,5000);
 }
 testtimer();
-*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
