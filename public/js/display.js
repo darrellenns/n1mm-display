@@ -1,3 +1,8 @@
+var socket = io();
+socket.on('news', function (data) {
+	console.log(data);
+});
+
 var width = 1200,
 		height = 600;
 

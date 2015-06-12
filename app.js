@@ -12,3 +12,13 @@ app.use('/js',  express.static(__dirname + '/bower_components'));
 app.get('/', function (req, res) {
   res.render('index');
 });
+
+io.on('connection', function (socket) {
+	socket.emit('news', { hello: 'world' });
+});
+
+var testtimer= function () {
+	io.emit('news', { hello: 'second' });
+	setTimeout(testtimer,1000);
+}
+testtimer();
