@@ -13,8 +13,11 @@ var path = d3.geo.path()
 //var graticule = d3.geo.graticule();
 
 var svg = d3.select("body").append("svg")
+		.attr("id","worldmap")
 		.attr("width", width)
-		.attr("height", height);
+		.attr("height", height)
+		.attr("viewBox","0 0 "+width+" "+height)
+		.attr("preserveAspectRatio","xMinYMid")
 
 /*
 svg.append("path")
@@ -27,7 +30,6 @@ d3.json("data/prov_4326_simple.topo.json",function(error,canada){
 			.datum(topojson.mesh(canada, canada.objects.provinces))
 			.attr("class", "boundary")
 			.attr("d", path);
-	console.log(canada);
 });
 
 d3.json("data/us-10m.json",function(error,us){
@@ -52,7 +54,10 @@ d3.json("data/world-50m.json", function(error, world) {
 
 d3.select(self.frameElement).style("height", height + "px");
 
+var aspect=$('svg').width()/$('svg').height();
 $(window).on("resize",function(){
-		console.log("HI THERE");
+		var targetWidth=$('body').width();
+		svg.attr("width",targetWidth);
+		svg.attr("height",Math.round(targetWidth/aspect));
 }).trigger("resize");
 
