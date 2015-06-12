@@ -54,7 +54,7 @@ d3.json("data/world-50m.json", function(error, world) {
 
 d3.select(self.frameElement).style("height", height + "px");
 
-var aspect=$('svg').width()/$('svg').height();
+var aspect=$('#worldmap').width()/$('#worldmap').height();
 $(window).on("resize",function(){
 		var targetWidth=$('body').width();
 		svg.attr("width",targetWidth);
