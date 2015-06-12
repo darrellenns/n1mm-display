@@ -30,11 +30,14 @@ io.on('connection', function (socket) {
 });
 
 //just an example of sending data to the client asynchronously
+var contactid=0;
 var testtimer= function () {
+	contactid+=1;
 	io.emit('newcontact', {
+		id:contactid,
 		coord:[Math.random()*(360)-180,Math.random()*(180)-90]
 	});
-	setTimeout(testtimer,5000);
+	setTimeout(testtimer,Math.random()*3000);
 }
 testtimer();
 

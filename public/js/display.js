@@ -57,43 +57,38 @@ d3.json("data/world-50m.json", function(error, world) {
 
 });
 
-// points
-var gpsPoints=new Array(10);
-for(var i=0;i<gpsPoints.length;i++){
-	gpsPoints[i]=[Math.random()*(360)-180,Math.random()*(180)-90];
-}
 var contact=[];
 socket.on('newcontact', function (data) {
 	contact.push(data);
 
-	var points=svg.selectAll("circle.contact").data(contact);
-	var lines=svg.selectAll("line.contact").data([data]);
-	//#TODO: apply classes object, and filter based on them
-	//
+	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
+	var lines=svg.selectAll("line.contact").data([data],function(d){return d.id});
 	
-	//TODO: deal with overlapping transitions
-	points
+	svg.selectAll("circle.contact.complete")
+		.attr("class","contact old")
 		.transition()
 			.duration(1000)
-			.style("r","5px")
+			.style("r","8px")
 			.attr("fill", "orange")
 			.style("fill-opacity", 1)
 		.transition()
+			.delay(5000)
 			.duration(1000)
-			.style("r","2px")
+			.style("r","3px")
 			.attr("fill", "teal");
 
 	points.enter().append("circle")
-			.attr("class","contact")
+			.attr("class","contact new")
 			.attr("cx", function (d) { return projection(d.coord)[0]; })
 			.attr("cy", function (d) { return projection(d.coord)[1]; })
 			.style("fill-opacity", 1e-6)
 			.attr("r","100px")
 			.attr("fill","white")
 		.transition()
+			.attr("class","contact complete")
 			.delay(300)
 			.duration(1000)
-			.attr("r", "5px")
+			.attr("r", "10px")
 			.attr("fill", "red")
 			.style("fill-opacity", 1);
 
@@ -115,6 +110,8 @@ socket.on('newcontact', function (data) {
 		.attr("x1", function (d) { return projection(d.coord)[0]; })
 		.attr("y1", function (d) { return projection(d.coord)[1]; })
 		.remove();
+
+	lines.exit();
 
 });
 
