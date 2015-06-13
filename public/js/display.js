@@ -68,22 +68,15 @@ socket.on('connect',function(){
 });
 
 socket.on('oldcontact', function (data) {
-	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
-	points.remove();
 	contact.push(data);
+	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 	points.enter().append("circle")
 		.attr("cx", function (d) { return projection(d.coord)[0]; })
 		.attr("cy", function (d) { return projection(d.coord)[1]; })
-		.attr("class","contact old")
-		.style("fill-opacity", 1e-6)
-		.attr("r","100px")
-		.attr("fill","white")
-		.transition()
-			.duration(3000)
-			.style("r","3px")
-			.style("fill-opacity", 1)
-			.attr("fill", "teal")
-			.attr("class","contact old complete");
+		.attr("class","contact old complete")
+		.style("fill-opacity", 1)
+		.attr("r","3px")
+		.attr("fill","teal");
 });
 
 socket.on('newcontact', function (data) {
