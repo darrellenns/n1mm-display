@@ -1,5 +1,5 @@
-
 var gpsHome=[-122.807727,49.2480338];
+var clubCallsign="VE7SCC";
 
 var width = 1600,
 		height = 1600;
@@ -12,8 +12,6 @@ var projection = d3.geo.mercator()
 
 var path = d3.geo.path()
 		.projection(projection);
-
-//var graticule = d3.geo.graticule();
 
 var svg = d3.select("body").append("svg")
 		.attr("id","worldmap")
@@ -29,12 +27,6 @@ $(window).on("resize",function(){
 		svg.attr("width",targetWidth);
 		svg.attr("height",Math.round(targetWidth/aspect));
 }).trigger("resize");
-/*
-svg.append("path")
-		.datum(graticule)
-		.attr("class", "graticule")
-		.attr("d", path);
-	*/
 
 
 var draw_map=function(callback){
@@ -67,11 +59,11 @@ var draw_map=function(callback){
 };
 
 
+var contact=[];
+
 draw_map(function(){
 	
 	var socket = io();
-
-	var contact=[];
 
 	socket.on('connect',function(){
 		contact=[];//erase all contacts (out of data information)
@@ -163,6 +155,6 @@ draw_map(function(){
 		.attr("fill","teal")
 		.attr("stroke","orange")
 		.style("fill-opacity", 1)
-		.text("VE7SCC");
+		.text(clubCallsign);
 });
 
