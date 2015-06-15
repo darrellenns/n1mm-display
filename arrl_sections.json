@@ -1,0 +1,666 @@
+{
+  "CT": {
+    "Location":"Connecticut",
+    "Area":1,
+    "long min":-71.8055008,
+    "lat min":41.2528638,
+    "long max":-73.4333743,
+    "lat max":42.0202909
+  },
+  "EMA": {
+    "Location":"Eastern  Massachusetts",
+    "Area":1,
+    "long min":-70.74031063,
+    "lat min":41.69516319,
+    "long max":-71.1179126,
+    "lat max":42.68356968
+  },
+  "ME": {
+    "Location":"Maine",
+    "Area":1,
+    "long min":-67.9376875,
+    "lat min":43.9879119,
+    "long max":-70.22587739,
+    "lat max":46.79128735
+  },
+  "NH": {
+    "Location":"New Hampshire",
+    "Area":1,
+    "long min":-70.9992723,
+    "lat min":42.91577927,
+    "long max":-71.91846633,
+    "lat max":44.2489333
+  },
+  "RI": {
+    "Location":"Rhode Island",
+    "Area":1,
+    "long min":-71.23911586,
+    "lat min":41.49429725,
+    "long max":-71.77662418,
+    "lat max":41.9864139
+  },
+  "VT": {
+    "Location":"Vermont",
+    "Area":1,
+    "long min":-72.45747258,
+    "lat min":42.76462741,
+    "long max":-73.27393319,
+    "lat max":44.94542396
+  },
+  "WMA": {
+    "Location":"Western Massachusetts",
+    "Area":1,
+    "long min":-71.33605482,
+    "lat min":42.06952507,
+    "long max":-73.34139127,
+    "lat max":42.64560853
+  },
+  "ENY": {
+    "Location":"Eastern New York",
+    "Area":2,
+    "long min":-73.5294734,
+    "lat min":42.01643551,
+    "long max":-76.14714613,
+    "lat max":43.49815422
+  },
+  "NLI": {
+    "Location":"New York City - Long Island",
+    "Area":2,
+    "long min":-72.12150639,
+    "lat min":40.79058604,
+    "long max":-73.67186781,
+    "lat max":40.87189489
+  },
+  "NNJ": {
+    "Location":"Northern New Jersey",
+    "Area":2,
+    "long min":-74.08305114,
+    "lat min":40.11107263,
+    "long max":-74.83776683,
+    "lat max":41.15203514
+  },
+  "NNY": {
+    "Location":"Northern New York",
+    "Area":2,
+    "long min":-73.38304739,
+    "lat min":43.41033204,
+    "long max":-75.54686625,
+    "lat max":44.62902312
+  },
+  "SNJ": {
+    "Location":"Southern New Jersey",
+    "Area":2,
+    "long min":-74.48479178,
+    "lat min":39.40298861,
+    "long max":-74.93329061,
+    "lat max":40.028393
+  },
+  "WNY": {
+    "Location":"Western New York",
+    "Area":2,
+    "long min":-75.59689878,
+    "lat min":42.09581022,
+    "long max":-78.89035419,
+    "lat max":43.35023416
+  },
+  "DE": {
+    "Location":"Delaware",
+    "Area":3,
+    "long min":-75.04787767,
+    "lat min":38.54509203,
+    "long max":-75.74107488,
+    "lat max":39.66780807
+  },
+  "EPA": {
+    "Location":"Eastern Pennsylvania",
+    "Area":3,
+    "long min":-75.28798796,
+    "lat min":39.87254532,
+    "long max":-77.47518949,
+    "lat max":41.98168309
+  },
+  "MDC": {
+    "Location":"Maryland-DC",
+    "Area":3,
+    "long min":-75.72627089,
+    "lat min":38.13931285,
+    "long max":-77.11751158,
+    "lat max":39.70389491
+  },
+  "WPA": {
+    "Location":"Western Pennsylvania",
+    "Area":3,
+    "long min":-77.85538048,
+    "lat min":39.72994308,
+    "long max":-80.43418325,
+    "lat max":41.84865185
+  },
+  "AL": {
+    "Location":"Alabama",
+    "Area":4,
+    "long min":-85.25354179,
+    "lat min":31.15637288,
+    "long max":-87.89310478,
+    "lat max":34.73447608
+  },
+  "GA": {
+    "Location":"Georgia",
+    "Area":4,
+    "long min":-82.13113558,
+    "lat min":31.15562854,
+    "long max":-84.93669507,
+    "lat max":34.13965505
+  },
+  "KY": {
+    "Location":"Kentucky",
+    "Area":4,
+    "long min":-83.22196886,
+    "lat min":36.95486865,
+    "long max":-87.77808922,
+    "lat max":38.0324658
+  },
+  "NC": {
+    "Location":"North Carolina",
+    "Area":4,
+    "long min":-76.115946,
+    "lat min":35.23115413,
+    "long max":-81.58139918,
+    "lat max":36.34921061
+  },
+  "NFL": {
+    "Location":"Northern Florida",
+    "Area":4,
+    "long min":-80.86558091,
+    "lat min":28.38456004,
+    "long max":-83.08034124,
+    "lat max":30.36345545
+  },
+  "SC": {
+    "Location":"South Carolina",
+    "Area":4,
+    "long min":-78.94291655,
+    "lat min":33.18954684,
+    "long max":-81.61951796,
+    "lat max":34.38822421
+  },
+  "SFL": {
+    "Location":"Southern Florida",
+    "Area":4,
+    "long min":-79.93903769,
+    "lat min":25.6756875,
+    "long max":-82.69864028,
+    "lat max":28.2754397
+  },
+  "WCF": {
+    "Location":"West  Central Florida",
+    "Area":4,
+    "long min":-81.74516507,
+    "lat min":27.7709543,
+    "long max":-83.16199215,
+    "lat max":29.38629624
+  },
+  "TN": {
+    "Location":"Tennessee",
+    "Area":4,
+    "long min":-84.10117596,
+    "lat min":35.49960097,
+    "long max":-88.51819905,
+    "lat max":36.34452877
+  },
+  "VA": {
+    "Location":"Virginia",
+    "Area":4,
+    "long min":-77.13759067,
+    "lat min":36.65699517,
+    "long max":-81.55466185,
+    "lat max":38.85618721
+  },
+  "PR": {
+    "Location":"Puerto Rico",
+    "Area":4,
+    "long min":-65.75988801,
+    "lat min":17.9888132,
+    "long max":-67.16684895,
+    "lat max":18.51927414
+  },
+  "VI": {
+    "Location":"Virgin Islands",
+    "Area":4,
+    "long min":-64.66755734,
+    "lat min":18.30245587,
+    "long max":-64.99772788,
+    "lat max":18.38270961
+  },
+  "AR": {
+    "Location":"Arkansas",
+    "Area":5,
+    "long min":-91.16369204,
+    "lat min":33.53425559,
+    "long max":-94.15130775,
+    "lat max":36.2146039
+  },
+  "LA": {
+    "Location":"Louisiana",
+    "Area":5,
+    "long min":-91.67845379,
+    "lat min":29.73310531,
+    "long max":-93.75476175,
+    "lat max":32.92626813
+  },
+  "MS": {
+    "Location":"Mississippi",
+    "Area":5,
+    "long min":-88.51265222,
+    "lat min":31.00548488,
+    "long max":-90.39423402,
+    "lat max":34.68722815
+  },
+  "NM": {
+    "Location":"New Mexico",
+    "Area":5,
+    "long min":-103.1083745,
+    "lat min":32.02572944,
+    "long max":-108.9260133,
+    "lat max":36.9172975
+  },
+  "NTX": {
+    "Location":"North Texas",
+    "Area":5,
+    "long min":-100.0487806,
+    "lat min":32.07363445,
+    "long max":-102.9551451,
+    "lat max":36.42755503
+  },
+  "OK": {
+    "Location":"Oklahoma",
+    "Area":5,
+    "long min":-94.71493208,
+    "lat min":33.96955509,
+    "long max":-99.83190276,
+    "lat max":36.8663687
+  },
+  "STX": {
+    "Location":"South Texas",
+    "Area":5,
+    "long min":-95.92259682,
+    "lat min":28.51716683,
+    "long max":-100.7015458,
+    "lat max":31.52986104
+  },
+  "WTX": {
+    "Location":"West Texas",
+    "Area":5,
+    "long min":-102.3656427,
+    "lat min":29.86944744,
+    "long max":-104.7980047,
+    "lat max":31.95042498
+  },
+  "EB": {
+    "Location":"East Bay",
+    "Area":6,
+    "long min":-121.4905306,
+    "lat min":37.47500722,
+    "long max":-122.4993435,
+    "lat max":37.7415442
+  },
+  "LAX": {
+    "Location":"Los Angeles",
+    "Area":6,
+    "long min":-117.797499,
+    "lat min":33.95195974,
+    "long max":-118.8149693,
+    "lat max":34.79972684
+  },
+  "ORG": {
+    "Location":"Orange",
+    "Area":6,
+    "long min":-117.6429053,
+    "lat min":33.56147129,
+    "long max":-117.8676343,
+    "lat max":33.82692369
+  },
+  "SB": {
+    "Location":"Santa Barbara",
+    "Area":6,
+    "long min":-119.4930518,
+    "lat min":34.43019291,
+    "long max":-120.5511215,
+    "lat max":34.96209954
+  },
+  "SCV": {
+    "Location":"Santa Clara Valley",
+    "Area":6,
+    "long min":-121.463705,
+    "lat min":37.14143813,
+    "long max":-121.9742057,
+    "lat max":37.38351742
+  },
+  "SDG": {
+    "Location":"San Diego",
+    "Area":6,
+    "long min":-116.1298282,
+    "lat min":32.63325644,
+    "long max":-117.3877275,
+    "lat max":33.38564724
+  },
+  "SF": {
+    "Location":"San Francisco",
+    "Area":6,
+    "long min":-122.1099689,
+    "lat min":37.72464496,
+    "long max":-122.4977315,
+    "lat max":37.87833827
+  },
+  "SJV": {
+    "Location":"San Joaquin Valley",
+    "Area":6,
+    "long min":-120.9859132,
+    "lat min":37.79459123,
+    "long max":-121.5038907,
+    "lat max":38.15894411
+  },
+  "SV": {
+    "Location":"Sacramento Valley",
+    "Area":6,
+    "long min":-121.0738622,
+    "lat min":38.30760859,
+    "long max":-121.5213224,
+    "lat max":38.6942269
+  },
+  "PAC": {
+    "Location":"Pacific",
+    "Area":6,
+    "long min":-120.139083,
+    "lat min":38.65052792,
+    "long max":-120.9834562,
+    "lat max":38.89645206
+  },
+  "AZ": {
+    "Location":"Arizona",
+    "Area":7,
+    "long min":-109.275318,
+    "lat min":32.0596705,
+    "long max":-113.8396484,
+    "lat max":36.55967215
+  },
+  "EWA": {
+    "Location":"Eastern Washington",
+    "Area":7,
+    "long min":-117.0979668,
+    "lat min":46.02326342,
+    "long max":-120.2627799,
+    "lat max":48.94680368
+  },
+  "ID": {
+    "Location":"Idaho",
+    "Area":7,
+    "long min":-111.3637,
+    "lat min":42.24611803,
+    "long max":-116.699962,
+    "lat max":44.75567182
+  },
+  "MT": {
+    "Location":"Montana",
+    "Area":7,
+    "long min":-104.3891615,
+    "lat min":45.13917701,
+    "long max":-114.5107153,
+    "lat max":48.7767783
+  },
+  "NV": {
+    "Location":"Nevada",
+    "Area":7,
+    "long min":-114.2523415,
+    "lat min":37.70897172,
+    "long max":-118.5859452,
+    "lat max":41.8626317
+  },
+  "OR": {
+    "Location":"Oregon",
+    "Area":7,
+    "long min":-117.174576,
+    "lat min":42.08420395,
+    "long max":-123.9702381,
+    "lat max":45.38723334
+  },
+  "UT": {
+    "Location":"Utah",
+    "Area":7,
+    "long min":-109.1901546,
+    "lat min":37.07775596,
+    "long max":-113.937517,
+    "lat max":40.89962377
+  },
+  "WWA": {
+    "Location":"Western Washington",
+    "Area":7,
+    "long min":-120.1207789,
+    "lat min":46.06606747,
+    "long max":-124.4828119,
+    "lat max":48.11358962
+  },
+  "WY": {
+    "Location":"Wyoming",
+    "Area":7,
+    "long min":-104.1416926,
+    "lat min":41.05201964,
+    "long max":-110.9786768,
+    "lat max":44.93447826
+  },
+  "AK": {
+    "Location":"Alaska",
+    "Area":7,
+    "long min":-142.8689428,
+    "lat min":59.53056294,
+    "long max":-166.0010518,
+    "lat max":69.37428926
+  },
+  "MI": {
+    "Location":"Michigan",
+    "Area":8,
+    "long min":-82.89981729,
+    "lat min":42.12570237,
+    "long max":-86.20977297,
+    "lat max":45.37660389
+  },
+  "OH": {
+    "Location":"Ohio",
+    "Area":8,
+    "long min":-81.15010777,
+    "lat min":39.44825774,
+    "long max":-84.72187406,
+    "lat max":41.63249786
+  },
+  "WV": {
+    "Location":"West Virginia",
+    "Area":8,
+    "long min":-80.3981642,
+    "lat min":37.57825108,
+    "long max":-81.68773985,
+    "lat max":39.11270701
+  },
+  "IL": {
+    "Location":"Illinois",
+    "Area":9,
+    "long min":-87.74045094,
+    "lat min":38.47342597,
+    "long max":-90.63171614,
+    "lat max":42.42611637
+  },
+  "IN": {
+    "Location":"Indiana",
+    "Area":9,
+    "long min":-84.88599218,
+    "lat min":38.81165456,
+    "long max":-87.46136701,
+    "lat max":41.72385896
+  },
+  "WI": {
+    "Location":"Wisconsin",
+    "Area":9,
+    "long min":-87.10334961,
+    "lat min":42.54454563,
+    "long max":-91.17660682,
+    "lat max":45.67417377
+  },
+  "CO": {
+    "Location":"Colorado",
+    "Area":0,
+    "long min":-102.1367117,
+    "lat min":37.0718084,
+    "long max":-109.0139892,
+    "lat max":40.96520814
+  },
+  "IA": {
+    "Location":"Iowa",
+    "Area":0,
+    "long min":-91.12785835,
+    "lat min":40.69950382,
+    "long max":-96.24024253,
+    "lat max":43.4323694
+  },
+  "KS": {
+    "Location":"Kansas",
+    "Area":0,
+    "long min":-94.66003082,
+    "lat min":37.01237479,
+    "long max":-102.0122521,
+    "lat max":39.96359459
+  },
+  "MN": {
+    "Location":"Minnesota",
+    "Area":0,
+    "long min":-92.80975745,
+    "lat min":43.61283562,
+    "long max":-97.02239822,
+    "lat max":48.57795846
+  },
+  "MO": {
+    "Location":"Missouri",
+    "Area":0,
+    "long min":-91.15442359,
+    "lat min":36.53868883,
+    "long max":-94.70271025,
+    "lat max":40.50252814
+  },
+  "NE": {
+    "Location":"Nebraska",
+    "Area":0,
+    "long min":-95.92859139,
+    "lat min":40.0567588,
+    "long max":-102.1924571,
+    "lat max":42.96977097
+  },
+  "ND": {
+    "Location":"North Dakota",
+    "Area":0,
+    "long min":-97.05031456,
+    "lat min":45.943204,
+    "long max":-103.9893452,
+    "lat max":48.94532633
+  },
+  "SD": {
+    "Location":"South Dakota",
+    "Area":0,
+    "long min":-96.57790424,
+    "lat min":42.94575978,
+    "long max":-103.9962754,
+    "lat max":45.91071501
+  },
+  "MAR": {
+    "Location":"Maritime",
+    "Area":null,
+    "long min":-53.33581651,
+    "lat min":44.54968255,
+    "long max":-67.31082205,
+    "lat max":51.32142138
+  },
+  "NL": {
+    "Location":"Newfoundland/Labrador",
+    "Area":null,
+    "long min":-55.6353129,
+    "lat min":51.91600136,
+    "long max":-66.80750776,
+    "lat max":54.8281999
+  },
+  "QC": {
+    "Location":"Quebec",
+    "Area":null,
+    "long min":-68.49544457,
+    "lat min":47.52574026,
+    "long max":-78.47822915,
+    "lat max":54.67247424
+  },
+  "ONE": {
+    "Location":"Ontario East",
+    "Area":null,
+    "long min":-79.72484872,
+    "lat min":47.83092773,
+    "long max":-85.07622725,
+    "lat max":51.67426722
+  },
+  "ONN": {
+    "Location":"Ontario North",
+    "Area":null,
+    "long min":-82.57416825,
+    "lat min":52.2848861,
+    "long max":-90.69739801,
+    "lat max":55.35624856
+  },
+  "ONS": {
+    "Location":"Ontario South",
+    "Area":null,
+    "long min":-76.95442541,
+    "lat min":43.69813017,
+    "long max":-82.68717034,
+    "lat max":46.45806565
+  },
+  "GTA": {
+    "Location":"Greater Toronto Area",
+    "Area":null,
+    "long min":-78.54989011,
+    "lat min":43.62529225,
+    "long max":-80.2533424,
+    "lat max":43.91413297
+  },
+  "MB": {
+    "Location":"Manitoba",
+    "Area":null,
+    "long min":-95.28674734,
+    "lat min":49.13484463,
+    "long max":-101.7968998,
+    "lat max":59.73239048
+  },
+  "SK": {
+    "Location":"Saskatchewan",
+    "Area":null,
+    "long min":-101.7675112,
+    "lat min":49.14947169,
+    "long max":-109.7633428,
+    "lat max":59.66084344
+  },
+  "AB": {
+    "Location":"Alberta",
+    "Area":null,
+    "long min":-110.1643588,
+    "lat min":49.12346879,
+    "long max":-118.9844865,
+    "lat max":59.84771414
+  },
+  "BC": {
+    "Location":"British Columbia",
+    "Area":null,
+    "long min":-119.1016398,
+    "lat min":49.19426894,
+    "long max":-133.9115095,
+    "lat max":59.59594663
+  },
+  "NT": {
+    "Location":"Northern Territories",
+    "Area":null,
+    "long min":-102.6325103,
+    "lat min":60.06663158,
+    "long max":-140.6399394,
+    "lat max":68.80021189
+  }
+}
