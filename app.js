@@ -2,19 +2,12 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var settings=require('./settings.js');
+var geo=require('./geo.js');
 
 var logger = require('morgan');
 app.use(logger('dev'));
 
-server.listen(3000);
-server.on('listening',function(){
-	//let the user know the server is listening
-	var addr = server.address();
-	var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-	console.log("Listening on "+bind);
-});
 
 app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/public'));
@@ -58,33 +51,51 @@ app.use(function(err, req, res, next) {
 
 //database queries
 var sqlite3=require('sqlite3').verbose();
-var db=new sqlite3.Database("E:\\N1MM Logger+\\Databases\\ham.s3db");
+var db=new sqlite3.Database(settings.n1mm_db);
 var dxlog=function(clause,callback){
 	db.each("SELECT strftime('%s',TS) as t,* from DXLOG "+clause,function(err,row){
 		if(err) throw(err);
 		row['id']=row.t+row.Call;
-		row.t=parseInt(row.t);
-		row['coord']=[Math.random()*(360)-180,Math.random()*(180)-90];
 		callback(row);
 	});
 }
+var dxlog_addinfo=function(row){
+	row['coord']=geo.resolve(row);
+	row.t=parseInt(row.t);
+	//row['coord']=[Math.random()*(360)-180,Math.random()*(180)-90];
+	return(row);
+};
 
 var seen=[];
 var polldb=function(){
 	dxlog("",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
+			row=dxlog_addinfo(row);
 			seen.push(row.id);
 			io.emit('newcontact',row);
 		}
 	});
 	setTimeout(polldb,3000);
 }
-polldb();
 
 io.on('connection', function (socket) {
 	console.log("New socket.io connection");
 	dxlog("",function(row){
+		row=dxlog_addinfo(row);
 		socket.emit('oldcontact',row);
 	});
+});
+
+geo.init(function(){//callback runs once geolocation module is ready for use
+	server.listen(3000);
+	server.on('listening',function(){
+		//let the user know the server is listening
+		var addr = server.address();
+		var bind = typeof addr === 'string'
+		? 'pipe ' + addr
+		: 'port ' + addr.port;
+		console.log("Listening on "+bind);
+	});
+	polldb();//start polling the DXLOG database
 });

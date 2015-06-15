@@ -68,6 +68,7 @@ socket.on('connect',function(){
 });
 
 socket.on('oldcontact', function (data) {
+	data.coord=[data.coord.longitude,data.coord.latitude];
 	contact.push(data);
 	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 	points.enter().append("circle")
@@ -80,6 +81,7 @@ socket.on('oldcontact', function (data) {
 });
 
 socket.on('newcontact', function (data) {
+	data.coord=[data.coord.longitude,data.coord.latitude];
 	contact.push(data);
 
 	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
