@@ -60,6 +60,16 @@ var draw_map=function(callback){
 
 
 var contact=[];
+var band_count={};
+
+var processContact=function(data){
+	data.coord=[data.coord.longitude,data.coord.latitude];
+	contact.push(data);
+	if(!(data.Band in band_count)){
+		band_count[data.Band]=0;
+	}
+	band_count[data.Band]++;
+};
 
 draw_map(function(){
 	
@@ -67,13 +77,14 @@ draw_map(function(){
 
 	socket.on('connect',function(){
 		contact=[];//erase all contacts (out of data information)
+		band_count={};
 		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 		points.exit().remove();
 	});
 
 	socket.on('oldcontact', function (data) {
-		data.coord=[data.coord.longitude,data.coord.latitude];
-		contact.push(data);
+		processContact(data);
+
 		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 		points.enter().append("circle")
 			.attr("cx", function (d) { return projection(d.coord)[0]; })
@@ -85,11 +96,9 @@ draw_map(function(){
 	});
 
 	socket.on('newcontact', function (data) {
-		data.coord=[data.coord.longitude,data.coord.latitude];
-		contact.push(data);
+		processContact(data);
 
 		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
-		
 		svg.selectAll("circle.contact.new.complete")
 			.attr("class","contact old")
 			.transition()
