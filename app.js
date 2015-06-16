@@ -52,12 +52,12 @@ app.use(function(err, req, res, next) {
 //database queries
 var sqlite3=require('sqlite3').verbose();
 var db=new sqlite3.Database(settings.n1mm_db);
-var dxlog=function(clause,callback){
+var dxlog=function(clause,callback,complete){
 	db.each("SELECT strftime('%s',TS) as t,* from DXLOG "+clause,function(err,row){
 		if(err) throw(err);
 		row['id']=row.t+row.Call;
 		callback(row);
-	});
+	},complete);
 }
 var dxlog_addinfo=function(row){
 	row['coord']=geo.resolve(row);
@@ -75,8 +75,9 @@ var polldb=function(){
 			seen.push(row.id);
 			io.emit('newcontact',row);
 		}
+	},function(err,count){
+		setTimeout(polldb,3000);
 	});
-	setTimeout(polldb,3000);
 }
 
 io.on('connection', function (socket) {
@@ -84,6 +85,8 @@ io.on('connection', function (socket) {
 	dxlog("",function(row){
 		row=dxlog_addinfo(row);
 		socket.emit('oldcontact',row);
+	},function(err,count){
+		socket.emit('loadcomplete');
 	});
 });
 

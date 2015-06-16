@@ -148,31 +148,86 @@ var update=function(newcontact){
 	var bandscale=d3.scale.linear()
 		.domain([0,d3.max(bandbardata,function(d){return d.count})])
 		.range([0,300]);
-	console.log(bandscale(10));
 
-	bandbar.enter().append("rect").attr("class","bandcount");
+	bandbar.enter().append("rect").attr("class","bandcount")
+		.attr("x",65)
+		.attr("y",function(d,i){return 5+20*i})
+		.attr("height",15)
+		.attr("width",0)
+		.attr("fill","teal")
+		;
 
 	bandbar
-		.attr("width",function(d,i){return bandscale(d.count)})
-		.attr("y",function(d,i){return 5+15*i})
-		.attr("x",40)
-		.attr("height",10)
-		.attr("fill","teal");
+		.transition()
+			.duration(1000)
+			.attr("width",function(d,i){return bandscale(d.count)})
+			.attr("y",function(d,i){return 5+20*i})
+		;
 
 	var bandbar_band=svg.selectAll("text.bandcount_band")
-		.data(bandbardata,function(d){return d.band});
+		.data(bandbardata,function(d){return d.band})
+		;
 
 	bandbar_band.enter().append("text").attr("class","bandcount_band")
 		.attr("alignment-baseline","middle")
 		.attr("text-anchor","end")
-		.attr("height",10)
 		.attr("fill","orange")
-		.attr("font-size","10px")
+		.attr("font-size","15px")
+		.attr("font-weight","bold")
+		.attr("y",function(d,i){return 10+20*i+4})
+		.attr("x",60)
 		;
 	bandbar_band
-		.attr("y",function(d,i){return 10+15*i})
-		.attr("x",35)
-		.text(function(d){return d.band+"m"});
+		.transition()
+			.duration(1000)
+			.attr("y",function(d,i){return 10+20*i+4})
+			.text(function(d){return d.band+"MHz"})
+		;
+
+	var bandbar_count=svg.selectAll("text.bandcount_count")
+		.data(bandbardata,function(d){return d.band})
+		;
+
+	bandbar_count.enter().append("text").attr("class","bandcount_count")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","end")
+		.attr("height",15)
+		.attr("fill","orange")
+		.attr("font-size","15px")
+		.attr("font-weight","bold")
+		.attr("y",function(d,i){return 10+20*i+4})
+		.attr("x",65)
+		;
+	bandbar_count
+		.transition()
+			.duration(1000)
+			.attr("y",function(d,i){return 10+20*i+4})
+			.attr("x",function(d,i){return 60+bandscale(d.count)})
+			.text(function(d){return d.count});
+
+	var totalContacts=svg.selectAll("text.total_contacts")
+		.data([contact.length],function(d){return d});
+	totalContacts.enter().append("text")
+		.attr("class","total_contacts")
+		.attr("x",width-10)
+		.attr("y",100)
+		.attr("font-size","100px")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","end")
+		.attr("fill","red")
+		.style("fill-opacity", 1e-6)
+		.style("stroke-opacity", 1e-6)
+		.text(function(d){return d})
+		.transition()
+			.duration(500)
+			.style("fill-opacity",1)
+		;
+	totalContacts.exit()
+		.transition()
+			.duration(500)
+			.style("fill-opacity",0)
+			.remove()
+		;
 
 };
 
@@ -198,6 +253,9 @@ draw_map(function(){
 			.style("fill-opacity", 1)
 			.attr("r","3px")
 			.attr("fill","teal");
+	});
+
+	socket.on('loadcomplete',function(){
 		update();
 	});
 
@@ -216,5 +274,16 @@ draw_map(function(){
 		.attr("stroke","orange")
 		.style("fill-opacity", 1)
 		.text(clubCallsign);
+
+	svg.append("text")
+		.attr("x",width-10)
+		.attr("y",40)
+		.attr("font-size","25px")
+		.attr("alignment-baseline","baseline")
+		.attr("text-anchor","end")
+		.attr("fill","teal")
+		.style("fill-opacity", 1)
+		.text("Total Contacts");
+
 });
 
