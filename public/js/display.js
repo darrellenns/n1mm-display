@@ -63,6 +63,8 @@ var contact=[];
 var band_count={};
 var bands=[];
 
+var n={};
+
 var processContact=function(data){
 	data.coord=[data.coord.longitude,data.coord.latitude];
 	contact.push(data);
@@ -83,7 +85,7 @@ var update=function(newcontact){
 		.attr("class","contact old")
 		.transition()
 			.duration(1000)
-			.style("r","8px")
+			.style("r","6px")
 			.attr("fill", "orange")
 			.style("fill-opacity", 1)
 		.transition()
@@ -92,6 +94,17 @@ var update=function(newcontact){
 			.style("r","3px")
 			.attr("fill", "teal")
 			.attr("class","contact old complete");
+
+	var pulse=function(){
+		d3.select(this)
+		.transition()
+			.duration(250)
+			.attr("r", "8px")
+		.transition()
+			.duration(100)
+			.attr("r", "6px")
+			.each("end",pulse);
+	};
 
 	//add new points
 	points.enter().append("circle")
@@ -104,10 +117,12 @@ var update=function(newcontact){
 		.transition()
 			.attr("class","contact new complete")
 			.delay(500)
-			.duration(1000)
-			.attr("r", "10px")
+			.duration(500)
+			.attr("r", "6px")
 			.attr("fill", "red")
-			.style("fill-opacity", 1);
+			.style("fill-opacity", 1)
+			.each("end",pulse);
+
 
 	points.exit().remove();
 
