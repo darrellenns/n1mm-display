@@ -135,46 +135,45 @@ var update=function(newcontact){
 
 	lines.exit();
 
-	/*
-	var bandbar=svg.selectAll("rect.bandcount").data(
-			function(){
-				var ret=[];
-				for(var i=0;i<bands.length;i++){
-					ret.push({
-						"count":band_count[bands[i]],
-						"band":bands[i]
-					});
-				};
-				return ret;
-			}(),
-			function(d){return d.band}
-	);
+	var bandbardata=[];
+	for(var i=0;i<bands.length;i++){
+		bandbardata.push({
+			"count":band_count[bands[i]],
+			"band":bands[i]
+		});
+	};
+	var bandbar=svg.selectAll("rect.bandcount")
+		.data(bandbardata,function(d){return d.band});
+	dbg.bandbar=bandbar;
 
-//.domain([0,d3.max(bandbar.data(),function(d){console.log(d);return 0})])
 	var bandscale=d3.scale.linear()
-		.domain([0,47])
-		.range([0,100]);
+		.domain([0,d3.max(bandbardata,function(d){return d.count})])
+		.range([0,300]);
 	console.log(bandscale(10));
 
-	bandbar
-		.attr("width",function(d,i){return d.count*10})
-		.attr("y",function(d,i){return 10+50*i})
-		.attr("x",30)
-		.attr("height",10)
-		.attr("fill","red")
-		.text(function(d){return d.count})
-		;
+	bandbar.enter().append("rect").attr("class","bandcount");
 
-	bandbar.enter().append("rect")
-		.attr("class","bandcount")
-		.attr("y",function(d,i){return 10+50*i})
-		.attr("x",30)
-		.attr("width",function(d,i){return d.count*10})
+	bandbar
+		.attr("width",function(d,i){return bandscale(d.count)})
+		.attr("y",function(d,i){return 5+15*i})
+		.attr("x",40)
 		.attr("height",10)
-		.attr("fill","red")
-		.text(function(d){return d.count})
+		.attr("fill","teal");
+
+	var bandbar_band=svg.selectAll("text.bandcount_band")
+		.data(bandbardata,function(d){return d.band});
+
+	bandbar_band.enter().append("text").attr("class","bandcount_band")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","end")
+		.attr("height",10)
+		.attr("fill","orange")
+		.attr("font-size","10px")
 		;
-		*/
+	bandbar_band
+		.attr("y",function(d,i){return 10+15*i})
+		.attr("x",35)
+		.text(function(d){return d.band+"m"});
 
 };
 
@@ -211,7 +210,7 @@ draw_map(function(){
 	svg.append("text")
 		.attr("x",width/2)
 		.attr("y",100)
-		.attr("font-size",100)
+		.attr("font-size","100px")
 		.attr("alignment-baseline","middle")
 		.attr("text-anchor","middle")
 		.attr("fill","teal")
