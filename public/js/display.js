@@ -144,7 +144,6 @@ var update=function(newcontact){
 	};
 	var bandbar=svg.selectAll("rect.bandcount")
 		.data(bandbardata,function(d){return d.band});
-	dbg.bandbar=bandbar;
 
 	var bandscale=d3.scale.linear()
 		.domain([0,d3.max(bandbardata,function(d){return d.count})])
