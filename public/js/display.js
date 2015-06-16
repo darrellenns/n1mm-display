@@ -205,6 +205,7 @@ var update=function(newcontact){
 			.attr("x",function(d,i){return 60+bandscale(d.count)})
 			.text(function(d){return d.count});
 
+
 	var totalContacts=svg.selectAll("text.total_contacts")
 		.data([contact.length],function(d){return d});
 	totalContacts.enter().append("text")
@@ -228,7 +229,6 @@ var update=function(newcontact){
 			.style("fill-opacity",0)
 			.remove()
 		;
-
 };
 
 
@@ -240,7 +240,6 @@ draw_map(function(){
 		contact=[];
 		band_count={};
 		bands=[];
-		update();
 	});
 
 	socket.on('oldcontact', function (data) {
