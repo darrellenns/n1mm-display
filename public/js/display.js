@@ -1,8 +1,10 @@
 var gpsHome=[-122.807727,49.2480338];
 var clubCallsign="VE7SCC";
 
-var width = 1600,
-		height = 1600;
+var recent_delay=5000; //sets how long a contact dot remains orange
+
+var width = 1600;
+var height = 1600;
 
 var projection = d3.geo.mercator()
 	.center([0,-40])
@@ -89,7 +91,7 @@ var update=function(newcontact){
 			.attr("fill", "orange")
 			.style("fill-opacity", 1)
 		.transition()
-			.delay(5000)
+			.delay(recent_delay)
 			.duration(3000)
 			.style("r","3px")
 			.attr("fill", "teal")
