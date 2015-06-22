@@ -288,11 +288,11 @@ var refreshStations=function(data){
 		.text(function(d){return d.Freq});
 
 	ops.selectAll("text.mode")
-		.attr("transform","translate(110,0)")
+		.attr("transform","translate(140,0)")
 		.text(function(d){return d.Mode});
 
 	ops.selectAll("text.call")
-		.attr("transform","translate(150,0)")
+		.attr("transform","translate(185,0)")
 		.text(function(d){return d.Call});
 
 
