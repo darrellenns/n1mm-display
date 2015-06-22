@@ -267,9 +267,13 @@ var refreshStations=function(data){
 		;
 
 	enter.append("text").classed("operator",true);
-	enter.append("text").classed("call",true);
 	enter.append("text").classed("freq",true);
 	enter.append("text").classed("mode",true);
+	enter.append("text").classed("call",true)
+		.attr("fill","red")
+		.transition()
+			.duration(1000)
+			.attr("fill","teal");
 
 	ops
 		.attr("transform",function(d,i){return "translate(0,"+i*20+")"})
