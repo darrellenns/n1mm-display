@@ -82,6 +82,14 @@ var polldb=function(){
 	});
 }
 
+var pollStations=function(){
+	db.all("select * from dxlog inner join (select NetworkedCompNr,MAX(TS) as TS from dxlog where TS>DATETIME('now','-30 minutes') group by NetworkedCompNr) t on t.NetworkedCompNr=dxlog.NetworkedCompNr and t.TS=dxlog.TS order by NetworkedCompNr asc;"
+	,function(err,rows){
+		io.emit('stations',rows);
+		setTimeout(pollStations,3000);
+	});
+}
+
 io.on('connection', function (socket) {
 	console.log("New socket.io connection");
 	dxlog("",function(row){
@@ -103,4 +111,5 @@ geo.init(function(){//callback runs once geolocation module is ready for use
 		console.log("Listening on "+bind);
 	});
 	polldb();//start polling the DXLOG database
+	pollStations(); //start polling station status
 });

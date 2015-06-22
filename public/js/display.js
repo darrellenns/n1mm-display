@@ -68,7 +68,7 @@ var bands=[];
 var n={};
 
 var processContact=function(data){
-	data.coord=[data.coord.longitude,data.coord.latitude];
+	if(data.coord) data.coord=[data.coord.longitude,data.coord.latitude];
 	contact.push(data);
 	if(!(data.Band in band_count)){
 		bands.push(data.Band);
@@ -111,8 +111,8 @@ var update=function(newcontact){
 	//add new points
 	points.enter().append("circle")
 			.attr("class","contact new")
-			.attr("cx", function (d) { return projection(d.coord)[0]; })
-			.attr("cy", function (d) { return projection(d.coord)[1]; })
+			.attr("cx", function (d) { if (!d.coord) return null; return projection(d.coord)[0]; })
+			.attr("cy", function (d) { if (!d.coord) return null; return projection(d.coord)[1]; })
 			.style("fill-opacity", 1e-6)
 			.attr("r","100px")
 			.attr("fill","white")
@@ -141,13 +141,13 @@ var update=function(newcontact){
 	.transition()
 		.duration(500)
 		.ease("linear")
-		.attr("x2", function (d) { return projection(d.coord)[0]; })
-		.attr("y2", function (d) { return projection(d.coord)[1]; })
+		.attr("x2", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
+		.attr("y2", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
 	.transition()
 		.duration(500)
 		.ease("linear")
-		.attr("x1", function (d) { return projection(d.coord)[0]; })
-		.attr("y1", function (d) { return projection(d.coord)[1]; })
+		.attr("x1", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
+		.attr("y1", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
 		.remove();
 
 	lines.exit();
@@ -256,6 +256,44 @@ var update=function(newcontact){
 		;
 };
 
+var refreshStations=function(data){
+	var ops=svg.select("g.stationlist").select("g.stationlist_items").selectAll("g.station")
+		.data(data,function(d){return d.NetworkedCompNr.toString()+d.TS.toString();});
+
+	var enter=ops.enter().append("g")
+		.attr("class","station")
+			.attr("fill","teal")
+			.attr("font-size","15px")
+		;
+
+	enter.append("text").classed("operator",true);
+	enter.append("text").classed("call",true);
+	enter.append("text").classed("freq",true);
+	enter.append("text").classed("mode",true);
+
+	ops
+		.attr("transform",function(d,i){return "translate(0,"+i*20+")"})
+	;
+
+	ops.selectAll("text.operator")
+		.attr("fill","orange")
+		.text(function(d){return d.Operator});
+
+	ops.selectAll("text.freq")
+		.attr("transform","translate(70,0)")
+		.text(function(d){return d.Freq});
+
+	ops.selectAll("text.mode")
+		.attr("transform","translate(110,0)")
+		.text(function(d){return d.Mode});
+
+	ops.selectAll("text.call")
+		.attr("transform","translate(150,0)")
+		.text(function(d){return d.Call});
+
+
+	ops.exit().remove();
+}
 
 draw_map(function(){
 	
@@ -273,8 +311,8 @@ draw_map(function(){
 		processContact(data);
 		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
 		points.enter().append("circle")
-			.attr("cx", function (d) { return projection(d.coord)[0]; })
-			.attr("cy", function (d) { return projection(d.coord)[1]; })
+			.attr("cx", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
+			.attr("cy", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
 			.attr("class","contact old complete")
 			.style("fill-opacity", 1)
 			.attr("r","3px")
@@ -286,6 +324,24 @@ draw_map(function(){
 	socket.on('newcontact', function (data) {
 		processContact(data);
 		update(data);
+	});
+
+	var stationlist=svg.append("g")
+		.attr("class","stationlist")
+		.attr("transform","translate(10,"+projection([0,20])[1]+")")
+		;
+	stationlist.append("text")
+		.attr("fill","orange")
+		.attr("font-weight","bold")
+		.text("Current Operators")
+		;
+
+	stationlist.append("g")
+		.attr("class","stationlist_items")
+		.attr("transform","translate(0,20)")
+		;
+	socket.on('stations',function(data){
+		refreshStations(data);
 	});
 
 	svg.append("text")
@@ -310,4 +366,3 @@ draw_map(function(){
 		.text("Total Contacts");
 
 });
-
