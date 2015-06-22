@@ -65,7 +65,7 @@ var init=function(callback){
 	db=new sqlite3.Database('./qrz_cache.sqlite')
 		.on('open',function(){
 			db.serialize(function(){
-				db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL,lon REAL,geoloc TEXT)");
+				db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL NULL,lon REAL NULL,geoloc TEXT NULL)");
 				dbinsert=db.prepare("INSERT OR REPLACE INTO geo VALUES(?,?,?,?)");
 				if(!settings.qrz_user || !settings.qrz_pass){
 					console.log("No QRZ login credentials");
@@ -90,7 +90,9 @@ var qrzlocation=function(callsign,callback){
 			callback(null,result);
 		}else{
 			qrzlookup(callsign,function(err,result){
-				if(!err){
+				if(err){
+					dbinsert.run(callsign.toUpperCase(),null,null,null);
+				}else{
 					dbinsert.run(result.call,result.lat,result.lon,result.geoloc);
 				}
 				callback(err,result);
