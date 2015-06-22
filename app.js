@@ -89,7 +89,6 @@ io.on('connection', function (socket) {
 			socket.emit('oldcontact',row);
 		});
 	},function(err,count){
-		socket.emit('loadcomplete');
 	});
 });
 

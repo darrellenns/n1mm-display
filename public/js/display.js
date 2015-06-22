@@ -275,9 +275,6 @@ draw_map(function(){
 			.style("fill-opacity", 1)
 			.attr("r","3px")
 			.attr("fill","teal");
-	});
-
-	socket.on('loadcomplete',function(){
 		update();
 	});
 
