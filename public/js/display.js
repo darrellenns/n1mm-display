@@ -267,6 +267,8 @@ draw_map(function(){
 		bands=[];
 	});
 
+	var timer=null;
+
 	socket.on('oldcontact', function (data) {
 		processContact(data);
 		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
@@ -277,7 +279,8 @@ draw_map(function(){
 			.style("fill-opacity", 1)
 			.attr("r","3px")
 			.attr("fill","teal");
-		update();
+		clearTimeout(timer);
+		setTimeout(update,500); //wait for 500ms of no more data before refreshing the display
 	});
 
 	socket.on('newcontact', function (data) {
