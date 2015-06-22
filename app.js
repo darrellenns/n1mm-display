@@ -62,13 +62,12 @@ var dxlog=function(clause,callback,complete){
 var dxlog_addinfo=function(row){
 	row['coord']=geo.resolve(row);
 	row.t=parseInt(row.t);
-	//row['coord']=[Math.random()*(360)-180,Math.random()*(180)-90];
 	return(row);
 };
 
 var seen=[];
 var polldb=function(){
-	dxlog("",function(row){
+	dxlog("WHERE TS>DATETIME('now','-15 minutes')",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
 			row=dxlog_addinfo(row);
