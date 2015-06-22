@@ -46,19 +46,45 @@ var qrzlookup=function(callsign,callback){
 			for(var field in data){
 				data[field]=data[field][0];
 			}
+			try{
+				data.lat=parseFloat(data.lat);
+				data.lon=parseFloat(data.lon);
+			}catch(e){console.log(e);}
 			callback(null,data);
 		});
 	}
 };
 
-/*
-qrzlocation=function(callsign,callback){
-	//TODO: fetch from cache if possible
-	qrzlookup(callsign,function(err,result){
-		if(err){
-			callback(err,null);
-			return;
-		}
-		//TODO: save result in cache cache result
+var dbinsert=null;
+var db=new sqlite3.Database('./qrz_cache.sqlite')
+	.on('open',function(){
+		db.serialize(function(){
+			db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL,lon REAL,geoloc TEXT)");
+			dbinsert=db.prepare("INSERT OR REPLACE INTO geo VALUES(?,?,?,?)");
+		});
+	}).on('error',function(error){
+		throw(error);
+	});
+
+var qrzlocation=function(callsign,callback){
+	if(!dbinsert){//don't try to use cache if db is not ready
+		qrzlookup(callsign,callback);
+		return;
 	}
-};*/
+	db.get("SELECT * FROM geo WHERE UPPER(call)=UPPER(?)",[callsign],function(err,result){
+		if(err) console.log(err);
+		if(result){
+			callback(null,result);
+		}else{
+			qrzlookup(callsign,function(err,result){
+				if(!err){
+					dbinsert.run(result.call,result.lat,result.lon,result.geoloc);
+				}
+				callback(err,result);
+			});
+		}
+	});
+};
+
+exports.qrzlocation=qrzlocation;
+exports.qrzlookup=qrzlookup;
