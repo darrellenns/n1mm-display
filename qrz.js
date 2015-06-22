@@ -7,6 +7,10 @@ var sqlite3=require('sqlite3').verbose();
 
 var sessionid=null;
 var qrzlookup=function(callsign,callback){
+	if(!settings.qrz_user || !settings.qrz_pass){
+		callback("No QRZ login credentials",null);
+		return;
+	}
 	if (sessionid==null){
 		console.log("Logging in to QRZ");
 		rest.get('https://xmldata.qrz.com/xml/1.33/?username='+encodeURIComponent(settings.qrz_user)+'&password='+encodeURIComponent(settings.qrz_pass),{'parser':rest.parsers.xml}) 
@@ -63,8 +67,12 @@ var init=function(callback){
 			db.serialize(function(){
 				db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL,lon REAL,geoloc TEXT)");
 				dbinsert=db.prepare("INSERT OR REPLACE INTO geo VALUES(?,?,?,?)");
-				qrzlookup("",function(err,result){}); //Forces initial QRZ login
-				callback();
+				if(!settings.qrz_user || !settings.qrz_pass){
+					console.log("No QRZ login credentials");
+					callback("No QRZ login credentials");
+				}else{
+					qrzlookup("",function(err,result){callback();}); //Forces initial QRZ login
+				}
 			});
 		}).on('error',function(error){
 			throw(error);

@@ -29,10 +29,11 @@ exports.init=function(callback){
 
 exports.resolve=function(row,callback){
 	qrz.geo(row.Call,function(err,result){
-		if(result.lat && result.lon && (result.geoloc=='user' || result.geoloc=='geocode' || result.geoloc=='grid' || result.geocode=='zip')){
+		if(result && result.lat && result.lon && (result.geoloc=='user' || result.geoloc=='geocode' || result.geoloc=='grid' || result.geocode=='zip')){
 			callback({
 				'latitude':result.lat,
-				'longitude':result.lon
+				'longitude':result.lon,
+				'source':'qrz'
 			});
 			return;
 		}
@@ -40,7 +41,8 @@ exports.resolve=function(row,callback){
 			section=arrl_section[row.Sect.toUpperCase()];
 			callback({
 				'latitude':random_bounds(section['lat min'],section['lat max']),
-				'longitude':random_bounds(section['long min'],section['long max'])
+				'longitude':random_bounds(section['long min'],section['long max']),
+				'source':'section'
 			});
 			return;
 		}catch(TypeError){
@@ -51,7 +53,8 @@ exports.resolve=function(row,callback){
 			if(data){
 				callback({
 					'latitude':random_center(data.Latitude,4),
-					'longitude':random_center(data.Longitude,4)
+					'longitude':random_center(data.Longitude,4),
+					'source':'prefix'
 				});
 				return;
 			}
