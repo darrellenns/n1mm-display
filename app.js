@@ -55,7 +55,7 @@ var db=new sqlite3.Database(settings.n1mm_db);
 var dxlog=function(clause,callback,complete){
 	db.each("SELECT strftime('%s',TS) as t,* from DXLOG "+clause,function(err,row){
 		if(err) throw(err);
-		row['id']=row.t+row.Call;
+		row['id']=row.t+row.Call+row.Band.toString()+row.Mode;
 		callback(row);
 	},complete);
 }
