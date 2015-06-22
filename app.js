@@ -59,10 +59,12 @@ var dxlog=function(clause,callback,complete){
 		callback(row);
 	},complete);
 }
-var dxlog_addinfo=function(row){
-	row['coord']=geo.resolve(row);
-	row.t=parseInt(row.t);
-	return(row);
+var dxlog_addinfo=function(row,callback){
+	geo.resolve(row,function(geodata){
+		row['coord']=geodata;
+		row.t=parseInt(row.t);
+		callback(row);
+	});
 };
 
 var seen=[];
@@ -70,9 +72,10 @@ var polldb=function(){
 	dxlog("WHERE TS>DATETIME('now','-15 minutes')",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
-			row=dxlog_addinfo(row);
-			seen.push(row.id);
-			io.emit('newcontact',row);
+			dxlog_addinfo(row,function(row){
+				seen.push(row.id);
+				io.emit('newcontact',row);
+			});
 		}
 	},function(err,count){
 		setTimeout(polldb,3000);
@@ -82,8 +85,9 @@ var polldb=function(){
 io.on('connection', function (socket) {
 	console.log("New socket.io connection");
 	dxlog("",function(row){
-		row=dxlog_addinfo(row);
-		socket.emit('oldcontact',row);
+		dxlog_addinfo(row,function(row){
+			socket.emit('oldcontact',row);
+		});
 	},function(err,count){
 		socket.emit('loadcomplete');
 	});

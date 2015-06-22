@@ -56,15 +56,20 @@ var qrzlookup=function(callsign,callback){
 };
 
 var dbinsert=null;
-var db=new sqlite3.Database('./qrz_cache.sqlite')
-	.on('open',function(){
-		db.serialize(function(){
-			db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL,lon REAL,geoloc TEXT)");
-			dbinsert=db.prepare("INSERT OR REPLACE INTO geo VALUES(?,?,?,?)");
+var db=null;
+var init=function(callback){
+	db=new sqlite3.Database('./qrz_cache.sqlite')
+		.on('open',function(){
+			db.serialize(function(){
+				db.run("CREATE TABLE IF NOT EXISTS geo(call TEXT PRIMARY KEY NOT NULL,lat REAL,lon REAL,geoloc TEXT)");
+				dbinsert=db.prepare("INSERT OR REPLACE INTO geo VALUES(?,?,?,?)");
+				qrzlookup("",function(err,result){}); //Forces initial QRZ login
+				callback();
+			});
+		}).on('error',function(error){
+			throw(error);
 		});
-	}).on('error',function(error){
-		throw(error);
-	});
+}
 
 var qrzlocation=function(callsign,callback){
 	if(!dbinsert){//don't try to use cache if db is not ready
@@ -86,5 +91,6 @@ var qrzlocation=function(callsign,callback){
 	});
 };
 
-exports.qrzlocation=qrzlocation;
-exports.qrzlookup=qrzlookup;
+exports.init=init;
+exports.geo=qrzlocation;
+exports.lookup=qrzlookup;

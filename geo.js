@@ -1,5 +1,6 @@
 var settings=require('./settings.js');
 var arrl_section=require('./arrl_sections.json');
+var qrz=require('./qrz.js');
 
 var random_bounds=function(min,max){
 	return(Math.random()*(max-min)+min);
@@ -20,33 +21,42 @@ exports.init=function(callback){
 				row.Longitude*=-1;
 				prefixData[row.Prefix]=row;
 		},function(){
-			callback();
+			qrz.init(callback);
 		});
 	});
 	db.close();
 };
 
-exports.resolve=function(row){
-	ret={};
-	try{
-		section=arrl_section[row.Sect.toUpperCase()];
-		return({
-			'latitude':random_bounds(section['lat min'],section['lat max']),
-			'longitude':random_bounds(section['long min'],section['long max'])
-		});
-	}catch(TypeError){
-	}
-
-	for(var i=row.Call.length;i>0;i--){
-		data=prefixData[row.Call.slice(0,i)];
-		if(data){
-			return({
-				'latitude':random_center(data.Latitude,4),
-				'longitude':random_center(data.Longitude,4)
+exports.resolve=function(row,callback){
+	qrz.geo(row.Call,function(err,result){
+		if(result.lat && result.lon && (result.geoloc=='user' || result.geoloc=='geocode' || result.geoloc=='grid' || result.geocode=='zip')){
+			callback({
+				'latitude':result.lat,
+				'longitude':result.lon
 			});
-			break;
+			return;
 		}
-	}
-	
-	return(null);
+		try{
+			section=arrl_section[row.Sect.toUpperCase()];
+			callback({
+				'latitude':random_bounds(section['lat min'],section['lat max']),
+				'longitude':random_bounds(section['long min'],section['long max'])
+			});
+			return;
+		}catch(TypeError){
+		}
+
+		for(var i=row.Call.length;i>0;i--){
+			data=prefixData[row.Call.slice(0,i)];
+			if(data){
+				callback({
+					'latitude':random_center(data.Latitude,4),
+					'longitude':random_center(data.Longitude,4)
+				});
+				return;
+			}
+		}
+		callback(null);
+		return;
+	});
 };
