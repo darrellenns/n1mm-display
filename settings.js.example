@@ -1,4 +1,21 @@
+//Title shown at the top of the page (such as club callsign)
+exports.title="VE7SCC";
+
+//Your location
+exports.gpsHome=[-122.807727,49.2480338];
+
+//How long recent contacts remain highlighted (in milliseconds)
+exports.recentDelay=60000;
+
+//Location of N1MM+ database files
+//The default setting works with the N1MM+ defaults
 exports.n1mm_db=process.env.USERPROFILE+"\\Documents\\N1MM Logger+\\Databases\\ham.s3db";
 exports.n1mm_admin_db=process.env.USERPROFILE+"\\Documents\\N1MM Admin.s3db";
+
+//QRZ.com Login info
+//If you have a paid QRZ account, set this to use it for geolocation
 //exports.qrz_user="qrz_username";
 //exports.qrz_pass="qrz_password";
+
+//Optionally, you can use a base64 encoded password as shown here (to mitigate casual glancing at the password)
+//exports.qrz_pass=new Buffer('Base64EncodedPasswordHere','base64').toString();

@@ -1,4 +1,8 @@
 extends layout
 
 block content
+	script.
+		title="#{title}";
+		gpsHome=[#{gpsHome[0]},#{gpsHome[1]}];
+		recentDelay=#{recentDelay};
 	script(src='js/display.js')

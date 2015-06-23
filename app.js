@@ -15,7 +15,11 @@ app.use(express.static(__dirname + '/public'));
 app.use('/js',  express.static(__dirname + '/bower_components'));
 
 app.get('/', function (req, res) {
-  res.render('index');
+  res.render('index',{
+	  title:settings.title,
+	  gpsHome:settings.gpsHome,
+	  recentDelay:settings.recentDelay
+  });
 });
 
 // catch 404 and forward to error handler

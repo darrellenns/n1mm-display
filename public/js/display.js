@@ -1,8 +1,3 @@
-var gpsHome=[-122.807727,49.2480338];
-var clubCallsign="VE7SCC";
-
-var recent_delay=5000; //sets how long a contact dot remains orange
-
 var width = 1600;
 var height = 1600;
 
@@ -91,7 +86,7 @@ var update=function(newcontact){
 			.attr("fill", "orange")
 			.style("fill-opacity", 1)
 		.transition()
-			.delay(recent_delay)
+			.delay(recentDelay)
 			.duration(3000)
 			.style("r","3px")
 			.attr("fill", "teal")
@@ -250,7 +245,7 @@ var refreshBandCounts=function(data){
 		.attr("x",0)
 	bands.selectAll("text.count")
 		.data(data,function(d){return d.Band})
-		.text(function(d){console.log(d);return d.count})
+		.text(function(d){return d.count})
 		.transition()
 			.duration(1000)
 			.attr("x",function(d){return bandscale(d.count)+10})
@@ -322,7 +317,7 @@ draw_map(function(){
 		.attr("fill","teal")
 		.attr("stroke","orange")
 		.style("fill-opacity", 1)
-		.text(clubCallsign);
+		.text(title);
 
 	svg.append("text")
 		.attr("x",width-10)
