@@ -299,6 +299,9 @@ var refreshStations=function(data){
 	ops.exit().remove();
 }
 
+var refreshBandCounts=function(data){
+}
+
 draw_map(function(){
 	
 	var socket = io();
@@ -309,27 +312,8 @@ draw_map(function(){
 		bands=[];
 	});
 
-	var timer=null;
 
-	socket.on('oldcontact', function (data) {
-		processContact(data);
-		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
-		points.enter().append("circle")
-			.attr("cx", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
-			.attr("cy", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
-			.attr("class","contact old complete")
-			.style("fill-opacity", 1)
-			.attr("r","3px")
-			.attr("fill","teal");
-		clearTimeout(timer);
-		setTimeout(update,500); //wait for 500ms of no more data before refreshing the display
-	});
-
-	socket.on('newcontact', function (data) {
-		processContact(data);
-		update(data);
-	});
-
+	//---------------------------current operator list
 	var stationlist=svg.append("g")
 		.attr("class","stationlist")
 		.attr("transform","translate(10,"+projection([0,20])[1]+")")
@@ -344,10 +328,8 @@ draw_map(function(){
 		.attr("class","stationlist_items")
 		.attr("transform","translate(0,20)")
 		;
-	socket.on('stations',function(data){
-		refreshStations(data);
-	});
 
+	//---------------------------static text/titles
 	svg.append("text")
 		.attr("x",width/2)
 		.attr("y",100)
@@ -368,5 +350,29 @@ draw_map(function(){
 		.attr("fill","teal")
 		.style("fill-opacity", 1)
 		.text("Total Contacts");
+
+	//---------------------------socket.io handlers
+	var oldcontacttimer=null;
+	socket.on('oldcontact', function (data) {
+		processContact(data);
+		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id});
+		points.enter().append("circle")
+			.attr("cx", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
+			.attr("cy", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
+			.attr("class","contact old complete")
+			.style("fill-opacity", 1)
+			.attr("r","3px")
+			.attr("fill","teal");
+		clearTimeout(oldcontacttimer);
+		setTimeout(update,500); //wait for 500ms of no more data before refreshing the display
+	});
+
+	socket.on('newcontact', function (data) {
+		processContact(data);
+		update(data);
+	});
+
+	socket.on('bandcounts',refreshBandCounts);
+	socket.on('stations',refreshStations);
 
 });
