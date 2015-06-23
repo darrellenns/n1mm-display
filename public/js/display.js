@@ -94,6 +94,7 @@ var update=function(newcontact){
 
 	var pulse=function(){
 		d3.select(this)
+		.filter("circle.contact.new.complete") //make sure there aren't any orphans
 		.transition()
 			.duration(250)
 			.attr("r", "8px")
@@ -201,6 +202,8 @@ var refreshBandCounts=function(data){
 
 	var bands=svg.select("g.bandcount").selectAll("g.band")
 		.data(data,function(d){return d.Band});
+
+	bands.exit().remove()
 
 	var enter=bands.enter().append("g")
 		.attr("class","band")
