@@ -152,108 +152,7 @@ var update=function(newcontact){
 
 	lines.exit();
 
-	var bandbardata=[];
-	for(var i=0;i<bands.length;i++){
-		bandbardata.push({
-			"count":band_count[bands[i]],
-			"band":bands[i]
-		});
-	};
 
-	var bandscale=d3.scale.linear()
-		.domain([0,d3.max(bandbardata,function(d){return d.count})])
-		.range([0,300]);
-
-
-	//-----band name text for band counts
-
-	var bandbar_band=svg.selectAll("text.bandcount_band")
-		.data(bandbardata,function(d){return d.band})
-		;
-
-	bandbar_band.enter().append("text").attr("class","bandcount_band")
-		.attr("alignment-baseline","middle")
-		.attr("text-anchor","end")
-		.attr("fill","orange")
-		.attr("font-size","15px")
-		.attr("font-weight","bold")
-		.attr("y",function(d,i){return 10+20*i+4})
-		.attr("x",60)
-		;
-	bandbar_band
-		.transition()
-			.duration(1000)
-			.attr("y",function(d,i){return 10+20*i+4})
-			.text(function(d){return d.band+"MHz"})
-		;
-
-	//-----bars for band counts
-
-	var bandbar=svg.selectAll("rect.bandcount")
-		.data(bandbardata,function(d){return d.band});
-
-	bandbar.enter().append("rect").attr("class","bandcount")
-		.attr("x",65)
-		.attr("y",function(d,i){return 5+20*i})
-		.attr("height",15)
-		.attr("width",0)
-		.attr("fill","teal")
-		;
-
-	bandbar
-		.transition()
-			.duration(1000)
-			.attr("width",function(d,i){return bandscale(d.count)})
-			.attr("y",function(d,i){return 5+20*i})
-		;
-
-	//-----count text for band counts
-
-	var bandbar_count=svg.selectAll("text.bandcount_count")
-		.data(bandbardata,function(d){return d.band})
-		;
-
-	bandbar_count.enter().append("text").attr("class","bandcount_count")
-		.attr("alignment-baseline","middle")
-		.attr("text-anchor","end")
-		.attr("height",15)
-		.attr("fill","orange")
-		.attr("font-size","15px")
-		.attr("font-weight","bold")
-		.attr("y",function(d,i){return 10+20*i+4})
-		.attr("x",65)
-		;
-	bandbar_count
-		.transition()
-			.duration(1000)
-			.attr("y",function(d,i){return 10+20*i+4})
-			.attr("x",function(d,i){var x=60+bandscale(d.count);return x<80?80:x;})
-			.text(function(d){return d.count});
-
-
-	var totalContacts=svg.selectAll("text.total_contacts")
-		.data([contact.length],function(d){return d});
-	totalContacts.enter().append("text")
-		.attr("class","total_contacts")
-		.attr("x",width-10)
-		.attr("y",100)
-		.attr("font-size","100px")
-		.attr("alignment-baseline","middle")
-		.attr("text-anchor","end")
-		.attr("fill","red")
-		.style("fill-opacity", 1e-6)
-		.style("stroke-opacity", 1e-6)
-		.text(function(d){return d})
-		.transition()
-			.duration(500)
-			.style("fill-opacity",1)
-		;
-	totalContacts.exit()
-		.transition()
-			.duration(500)
-			.style("fill-opacity",0)
-			.remove()
-		;
 };
 
 var refreshStations=function(data){
@@ -276,7 +175,7 @@ var refreshStations=function(data){
 			.attr("fill","teal");
 
 	ops
-		.attr("transform",function(d,i){return "translate(0,"+i*20+")"})
+		.attr("transform",function(d,i){return "translate(0,"+i*30+")"})
 	;
 
 	ops.selectAll("text.operator")
@@ -300,7 +199,87 @@ var refreshStations=function(data){
 }
 
 var refreshBandCounts=function(data){
-	console.log(data);
+
+	var bandscale=d3.scale.linear()
+		.domain([0,d3.max(data,function(d){return d.count})])
+		.range([0,300])
+
+	var bands=svg.select("g.bandcount").selectAll("g.band")
+		.data(data,function(d){return d.Band});
+
+	var enter=bands.enter().append("g")
+		.attr("class","band")
+
+	bands
+		.transition()
+		.duration(1000)
+		.attr("transform",function(d,i){return "translate(0,"+i*30+")"})
+
+	//------------band name text
+	enter.append("text").classed("bandname",true);
+	enter.selectAll("text.bandname")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","end")
+		.attr("fill","orange")
+		.attr("font-size","20px")
+		.attr("x",0)
+		.attr("y",11)
+		.text(function(d,i){return d.Band+"MHz"})
+
+	//------------band bar
+	enter.append("rect").classed("bar",true);
+	enter.selectAll("rect.bar")
+		.attr("x",10)
+		.attr("y",0)
+		.attr("height",20)
+		.attr("width",0)
+		.attr("fill","teal")
+	bands.selectAll("rect.bar")
+		.transition()
+			.duration(1000)
+			.attr("width",function(d){return bandscale(d.count)})
+	
+	//------------text count
+	enter.append("text").classed("count",true)
+	enter.selectAll("text.count")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","start")
+		.attr("height",20)
+		.attr("fill","orange")
+		.attr("font-size","20px")
+		.attr("y",11)
+		.attr("x",0)
+	bands.selectAll("text.count")
+		.text(function(d){return d.count})
+		.transition()
+			.duration(1000)
+			.attr("x",function(d){return bandscale(d.count)+10})
+	
+	//------------grand total
+	var total=data.map(function(x){return x.count}).reduce(function(a,b){return a+b})
+	var totalContacts=svg.selectAll("text.total_contacts")
+		.data([total],function(d){return d});
+	totalContacts.enter().append("text")
+		.attr("class","total_contacts")
+		.attr("x",width-10)
+		.attr("y",100)
+		.attr("font-size","100px")
+		.attr("alignment-baseline","middle")
+		.attr("text-anchor","end")
+		.attr("fill","red")
+		.style("fill-opacity", 1e-6)
+		.style("stroke-opacity", 1e-6)
+		.text(function(d){return d})
+		.transition()
+			.duration(500)
+			.style("fill-opacity",1)
+		;
+	totalContacts.exit()
+		.transition()
+			.duration(500)
+			.style("fill-opacity",0)
+			.remove()
+		;
 }
 
 draw_map(function(){
@@ -316,17 +295,17 @@ draw_map(function(){
 	//---------------------------band counts
 	svg.append("g")
 		.attr("class","bandcount")
-		.attr("transform","translate(500,500)")
+		.attr("transform","translate(80,10)")
 		;
 
 	//---------------------------current operator list
 	var stationlist=svg.append("g")
 		.attr("class","stationlist")
 		.attr("transform","translate(10,"+projection([0,20])[1]+")")
+		.attr("font-size",20);
 		;
 	stationlist.append("text")
 		.attr("fill","orange")
-		.attr("font-weight","bold")
 		.text("Current Operators")
 		;
 

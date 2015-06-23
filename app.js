@@ -100,7 +100,7 @@ var pollStations=function(){
 }
 
 var refreshBandCounts=function(){
-	db.all("select Band,count(*) from dxlog where ContestNR="+contestNR+" group by Band order by Band asc;"
+	db.all("select Band,count(*) as count from dxlog where ContestNR="+contestNR+" group by Band order by Band asc;"
 	,function(err,rows){
 		io.emit('bandcounts',rows);
 	});
