@@ -258,7 +258,7 @@ var update=function(newcontact){
 
 var refreshStations=function(data){
 	var ops=svg.select("g.stationlist").select("g.stationlist_items").selectAll("g.station")
-		.data(data,function(d){return d.NetworkedCompNr.toString()+d.TS.toString();});
+		.data(data,function(d){return d.NetBiosName+d.TS.toString();});
 
 	var enter=ops.enter().append("g")
 		.attr("class","station")

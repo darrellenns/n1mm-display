@@ -85,7 +85,7 @@ var polldb=function(){
 
 
 var pollStations=function(){
-	db.all("select * from dxlog inner join (select NetworkedCompNr,MAX(TS) as TS from dxlog where ContestNR="+contestid+" AND TS>DATETIME('now','-30 minutes') group by NetworkedCompNr) t on t.NetworkedCompNr=dxlog.NetworkedCompNr and t.TS=dxlog.TS WHERE ContestNR="+contestid+" order by NetworkedCompNr asc;"
+	db.all("select * from dxlog inner join (select NetBiosName,MAX(TS) as TS from dxlog where ContestNR="+contestid+" AND TS>DATETIME('now','-30 minutes') group by NetBiosName) t on t.NetBiosName=dxlog.NetBiosName and t.TS=dxlog.TS WHERE ContestNR="+contestid+" order by NetBiosName asc;"
 	,function(err,rows){
 		io.emit('stations',rows);
 		setTimeout(pollStations,3000);
