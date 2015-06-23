@@ -1,4 +1,4 @@
-exports.n1mm_db="E:\\N1MM Logger+\\Databases\\ham.s3db";
-exports.n1mm_admin_db="E:\\N1MM Logger+\\Databases\\N1MM Admin.s3db";
+exports.n1mm_db=process.env.USERPROFILE+"\\Documents\\N1MM Logger+\\Databases\\ham.s3db";
+exports.n1mm_admin_db=process.env.USERPROFILE+"\\Documents\\N1MM Admin.s3db";
 //exports.qrz_user="qrz_username";
 //exports.qrz_pass="qrz_password";
