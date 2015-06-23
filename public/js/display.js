@@ -300,6 +300,7 @@ var refreshStations=function(data){
 }
 
 var refreshBandCounts=function(data){
+	console.log(data);
 }
 
 draw_map(function(){
@@ -312,6 +313,11 @@ draw_map(function(){
 		bands=[];
 	});
 
+	//---------------------------band counts
+	svg.append("g")
+		.attr("class","bandcount")
+		.attr("transform","translate(500,500)")
+		;
 
 	//---------------------------current operator list
 	var stationlist=svg.append("g")

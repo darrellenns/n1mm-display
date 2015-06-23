@@ -74,15 +74,18 @@ var dxlog_addinfo=function(row,callback){
 //---------------------------------polling functions
 var seen=[];
 var pollContacts=function(){
+	var newcontacts=false;
 	dxlog("AND TS>DATETIME('now','-15 minutes')",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
+			newcontacts=true;
 			dxlog_addinfo(row,function(row){
 				seen.push(row.id);
 				io.emit('newcontact',row);
 			});
 		}
 	},function(err,count){
+		if(newcontacts) refreshBandCounts();
 		setTimeout(pollContacts,3000);
 	});
 }
@@ -96,11 +99,10 @@ var pollStations=function(){
 	});
 }
 
-var pollBandCounts=function(){
+var refreshBandCounts=function(){
 	db.all("select Band,count(*) from dxlog where ContestNR="+contestNR+" group by Band order by Band asc;"
 	,function(err,rows){
 		io.emit('bandcounts',rows);
-		setTimeout(pollBandCounts,3000);
 	});
 }
 
@@ -112,6 +114,7 @@ io.on('connection', function (socket) {
 			socket.emit('oldcontact',row);
 		});
 	},function(err,count){
+		refreshBandCounts();
 	});
 });
 
@@ -138,7 +141,6 @@ async.series([
 		server.listen(3000);
 		pollContacts();
 		pollStations();
-		pollBandCounts();
 		callback();
 	}
 ]);
