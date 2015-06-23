@@ -53,14 +53,16 @@ app.use(function(err, req, res, next) {
 //---------------------------------database helpers
 var sqlite3=require('sqlite3').verbose();
 var db=new sqlite3.Database(settings.n1mm_db);
-var contestid=-2;
+var contestNR=-2;
+
 var dxlog=function(clause,callback,complete){
-	db.each("SELECT strftime('%s',TS) as t,* from DXLOG WHERE ContestNR="+contestid.toString()+" "+clause,function(err,row){
+	db.each("SELECT strftime('%s',TS) as t,* from DXLOG WHERE ContestNR="+contestNR.toString()+" "+clause,function(err,row){
 		if(err) throw(err);
 		row['id']=row.t+row.Call+row.Band.toString()+row.Mode;
 		callback(row);
 	},complete);
 }
+
 var dxlog_addinfo=function(row,callback){
 	geo.resolve(row,function(geodata){
 		row['coord']=geodata;
@@ -87,10 +89,18 @@ var pollContacts=function(){
 
 
 var pollStations=function(){
-	db.all("select * from dxlog inner join (select NetBiosName,MAX(TS) as TS from dxlog where ContestNR="+contestid+" AND TS>DATETIME('now','-30 minutes') group by NetBiosName) t on t.NetBiosName=dxlog.NetBiosName and t.TS=dxlog.TS WHERE ContestNR="+contestid+" order by NetBiosName asc;"
+	db.all("select * from dxlog inner join (select NetBiosName,MAX(TS) as TS from dxlog where ContestNR="+contestNR+" AND TS>DATETIME('now','-30 minutes') group by NetBiosName) t on t.NetBiosName=dxlog.NetBiosName and t.TS=dxlog.TS WHERE ContestNR="+contestNR+" order by NetBiosName asc;"
 	,function(err,rows){
 		io.emit('stations',rows);
 		setTimeout(pollStations,3000);
+	});
+}
+
+var pollBandCounts=function(){
+	db.all("select Band,count(*) from dxlog where ContestNR="+contestNR+" group by Band order by Band asc;"
+	,function(err,rows){
+		io.emit('bandcounts',rows);
+		setTimeout(pollBandCounts,3000);
 	});
 }
 
@@ -115,19 +125,20 @@ server.on('listening',function(){
 
 //---------------------------------initialization
 async.series([
-	geo.init,
 	function(callback){
 		db.all("select max(ContestNR) as id from ContestInstance",function(err,rows){
 			if(err) throw(err);
-			contestid=rows[0].id;
-			console.log("Contest ID: "+contestid.toString());
+			contestNR=rows[0].id;
+			console.log("Contest ID: "+contestNR.toString());
 			callback();
 		});
 	},
+	geo.init,
 	function(callback){
 		server.listen(3000);
 		pollContacts();
 		pollStations();
+		pollBandCounts();
 		callback();
 	}
 ]);
