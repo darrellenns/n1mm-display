@@ -142,7 +142,7 @@ async.series([
 	},
 	geo.init,
 	function(callback){
-		server.listen(3000);
+		server.listen(settings.listenPort);
 		pollContacts();
 		pollStations();
 		callback();
