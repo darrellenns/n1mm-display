@@ -6,6 +6,7 @@
     "start": "node ./app.js"
   },
   "dependencies": {
+    "async": "^1.2.1",
     "express": "~4.12.4",
     "jade": "~1.9.2",
     "morgan": "~1.5.3",

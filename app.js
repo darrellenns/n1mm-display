@@ -1,3 +1,4 @@
+var async = require('async');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
@@ -49,7 +50,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-//database queries
+//---------------------------------database helpers
 var sqlite3=require('sqlite3').verbose();
 var db=new sqlite3.Database(settings.n1mm_db);
 var contestid=-2;
@@ -68,8 +69,9 @@ var dxlog_addinfo=function(row,callback){
 	});
 };
 
+//---------------------------------polling functions
 var seen=[];
-var polldb=function(){
+var pollContacts=function(){
 	dxlog("AND TS>DATETIME('now','-15 minutes')",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
@@ -79,7 +81,7 @@ var polldb=function(){
 			});
 		}
 	},function(err,count){
-		setTimeout(polldb,3000);
+		setTimeout(pollContacts,3000);
 	});
 }
 
@@ -92,6 +94,7 @@ var pollStations=function(){
 	});
 }
 
+//---------------------------------event handlers
 io.on('connection', function (socket) {
 	console.log("New socket.io connection");
 	dxlog("",function(row){
@@ -102,23 +105,29 @@ io.on('connection', function (socket) {
 	});
 });
 
-geo.init(function(){//callback runs once geolocation module is ready for use
-	server.listen(3000);
-	server.on('listening',function(){
-		//let the user know the server is listening
-		var addr = server.address();
-		var bind = typeof addr === 'string'
-		? 'pipe ' + addr
-		: 'port ' + addr.port;
-		console.log("Listening on "+bind);
-	});
-	//get ContestNR
-	db.all("select max(ContestNR) as id from ContestInstance",function(err,rows){
-		if(err) throw(err);
-		contestid=rows[0].id;
-		console.log("Contest ID: "+contestid.toString());
-
-		polldb();//start polling the DXLOG database
-		pollStations(); //start polling station status
-	});
+server.on('listening',function(){
+	var addr = server.address();
+	var bind = typeof addr === 'string'
+	? 'pipe ' + addr
+	: 'port ' + addr.port;
+	console.log("Listening on "+bind);
 });
+
+//---------------------------------initialization
+async.series([
+	geo.init,
+	function(callback){
+		db.all("select max(ContestNR) as id from ContestInstance",function(err,rows){
+			if(err) throw(err);
+			contestid=rows[0].id;
+			console.log("Contest ID: "+contestid.toString());
+			callback();
+		});
+	},
+	function(callback){
+		server.listen(3000);
+		pollContacts();
+		pollStations();
+		callback();
+	}
+]);
