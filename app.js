@@ -52,8 +52,9 @@ app.use(function(err, req, res, next) {
 //database queries
 var sqlite3=require('sqlite3').verbose();
 var db=new sqlite3.Database(settings.n1mm_db);
+var contestid=-2;
 var dxlog=function(clause,callback,complete){
-	db.each("SELECT strftime('%s',TS) as t,* from DXLOG "+clause,function(err,row){
+	db.each("SELECT strftime('%s',TS) as t,* from DXLOG WHERE ContestNR="+contestid.toString()+" "+clause,function(err,row){
 		if(err) throw(err);
 		row['id']=row.t+row.Call+row.Band.toString()+row.Mode;
 		callback(row);
@@ -69,7 +70,7 @@ var dxlog_addinfo=function(row,callback){
 
 var seen=[];
 var polldb=function(){
-	dxlog("WHERE TS>DATETIME('now','-15 minutes')",function(row){
+	dxlog("AND TS>DATETIME('now','-15 minutes')",function(row){
 		if(seen.indexOf(row.id)==-1){
 			console.log("New Contact: "+row.id);
 			dxlog_addinfo(row,function(row){
@@ -82,8 +83,9 @@ var polldb=function(){
 	});
 }
 
+
 var pollStations=function(){
-	db.all("select * from dxlog inner join (select NetworkedCompNr,MAX(TS) as TS from dxlog where TS>DATETIME('now','-30 minutes') group by NetworkedCompNr) t on t.NetworkedCompNr=dxlog.NetworkedCompNr and t.TS=dxlog.TS order by NetworkedCompNr asc;"
+	db.all("select * from dxlog inner join (select NetworkedCompNr,MAX(TS) as TS from dxlog where ContestNR="+contestid+" AND TS>DATETIME('now','-30 minutes') group by NetworkedCompNr) t on t.NetworkedCompNr=dxlog.NetworkedCompNr and t.TS=dxlog.TS WHERE ContestNR="+contestid+" order by NetworkedCompNr asc;"
 	,function(err,rows){
 		io.emit('stations',rows);
 		setTimeout(pollStations,3000);
@@ -110,6 +112,13 @@ geo.init(function(){//callback runs once geolocation module is ready for use
 		: 'port ' + addr.port;
 		console.log("Listening on "+bind);
 	});
-	polldb();//start polling the DXLOG database
-	pollStations(); //start polling station status
+	//get ContestNR
+	db.all("select max(ContestNR) as id from ContestInstance",function(err,rows){
+		if(err) throw(err);
+		contestid=rows[0].id;
+		console.log("Contest ID: "+contestid.toString());
+
+		polldb();//start polling the DXLOG database
+		pollStations(); //start polling station status
+	});
 });
