@@ -57,22 +57,10 @@ var draw_map=function(callback){
 
 
 var contact=[];
-var band_count={};
-var bands=[];
-
-var n={};
 
 var processContact=function(data){
 	if(data.coord) data.coord=[data.coord.longitude,data.coord.latitude];
 	contact.push(data);
-	if(!(data.Band in band_count)){
-		bands.push(data.Band);
-		bands.sort(function(a,b){return a-b});
-
-		band_count[data.Band]=0;
-	}
-	band_count[data.Band]++;
-
 };
 
 var update=function(newcontact){
@@ -285,8 +273,6 @@ draw_map(function(){
 
 	socket.on('connect',function(){
 		contact=[];
-		band_count={};
-		bands=[];
 	});
 
 	//---------------------------band counts
