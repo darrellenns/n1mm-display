@@ -2,7 +2,7 @@ var width = 1600
 var height = 1600
 
 var projection = d3.geo.mercator()
-	.center([0,-40])
+	.center([0,-45])
 		.scale((width + 1) / 2 / Math.PI)
 		.translate([width / 2, height / 2])
 		.precision(.1)
@@ -29,7 +29,7 @@ var greyline_data=function(){
 	ret=Array(30)
 	sp=subsolarpoint()
 	for(i=0;i<ret.length;i++){
-		x=i/ret.length
+		x=i/(ret.length-1)
 		ret[i]=p.invert([
 			x*360-180,
 			Math.cos(2*(x-sp[0]/360+0.5)*Math.PI)*90+sp[1]
@@ -96,8 +96,8 @@ var processContact=function(data){
 
 var update=function(newcontact){
 
-	var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id})
-	svg.selectAll("circle.contact.new.complete")
+	var points=svg.select("g.points").selectAll("circle.contact").data(contact,function(d){return d.id})
+	points.filter("circle.contact.new.complete")
 		.attr("class","contact old")
 		.transition()
 			.duration(1000)
@@ -144,8 +144,7 @@ var update=function(newcontact){
 	points.exit().remove()
 
 	//cool lines beaming in
-	
-	var lines=svg.selectAll("line.contact").data(typeof newcontact !== 'undefined' ? [newcontact] : [],function(d){return d.id})
+	var lines=svg.select("g.lines").selectAll("line.contact").data(typeof newcontact !== 'undefined' ? [newcontact] : [],function(d){return d.id})
 	lines.enter().append("line")
 		.attr("class","contact")
 		.attr("x1", projection(gpsHome)[0])
@@ -293,8 +292,6 @@ var refreshBandCounts=function(data){
 }
 
 var greylineTimer=function(){
-	var gl_data=greyline_data().map(projection)
-	gl_data.push([width,gl_data[0][1]])
 
 	var greyline=d3.svg.area()
 		.interpolate("cardinal")
@@ -303,13 +300,15 @@ var greylineTimer=function(){
 		.y0(0)
 
 	svg.selectAll("path.greyline")
-		.datum(gl_data,function(d,i){return i})
+		.datum(greyline_data().map(projection),function(d,i){return i})
 		.attr("d",greyline)
 
 	setTimeout(greylineTimer,60000);
 }
 
 draw_map(function(){
+	svg.append("g").attr("class","points")
+	svg.append("g").attr("class","lines")
 
 	//---------------------------greyline
 	svg.append("path").attr("class","greyline")
@@ -355,7 +354,7 @@ draw_map(function(){
 	var oldcontacttimer=null
 	socket.on('oldcontact', function (data) {
 		processContact(data)
-		var points=svg.selectAll("circle.contact").data(contact,function(d){return d.id})
+		var points=svg.select("g.points").selectAll("circle.contact").data(contact,function(d){return d.id})
 		points.enter().append("circle")
 			.attr("cx", function (d) { if(!d.coord) return null; return projection(d.coord)[0]; })
 			.attr("cy", function (d) { if(!d.coord) return null; return projection(d.coord)[1]; })
