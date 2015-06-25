@@ -19,3 +19,25 @@ body {
 	overflow: hidden;
 	font-family: sans-serif;
 }
+g.stationlist{
+	font-size: 30px;
+}
+text.stationlist.title{
+	fill: orange;
+}
+text.maintitle{
+	font-size: 100px;
+	text-anchor: middle;
+	fill: teal;
+	stroke: orange;
+}
+text.total_title{
+	font-size: 25px;
+	text-anchor: end;
+	fill: teal;
+}
+text.total_contacts{
+	font-size:100px;
+	text-anchor:end;
+	fill:red;
+}
