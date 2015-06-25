@@ -7,6 +7,37 @@ var projection = d3.geo.mercator()
 		.translate([width / 2, height / 2])
 		.precision(.1)
 
+var subsolarpoint=function(date){
+	if(!date) date=new Date();
+	JD=(date.getTime()/86400000.0)+2440587.5
+
+	var n=JD-2451545
+	var L=(280.460+0.9856474*n)%360
+	var g=(357528+0.9856003*n)%360
+	var lambda=L+1.915*Math.sin(g*Math.PI/180)+0.020*Math.sin(2*g*Math.PI/180)
+	var epsilon=23.439-0.0000004*n;
+	var DEC=Math.asin(Math.sin(epsilon*Math.PI/180.0)*Math.sin(lambda*Math.PI/180.0))*180.0/Math.PI;
+
+	return[
+		180-360*(date.getUTCHours()+date.getUTCMinutes()/60+date.getUTCSeconds()/3600)/24,
+		DEC
+	]
+}
+
+var greyline_data=function(){
+	var p=d3.geo.mercator().center([0,0]).scale(180/Math.PI).translate([0,0])
+	ret=Array(30)
+	sp=subsolarpoint()
+	for(i=0;i<ret.length;i++){
+		x=i/ret.length
+		ret[i]=p.invert([
+			x*360-180,
+			Math.cos(2*(x-sp[0]/360+0.5)*Math.PI)*90+sp[1]
+		])
+	}
+	return ret
+}
+
 var path = d3.geo.path()
 		.projection(projection)
 
@@ -261,13 +292,28 @@ var refreshBandCounts=function(data){
 			.remove()
 }
 
-draw_map(function(){
-	
-	var socket = io()
+var greylineTimer=function(){
+	var gl_data=greyline_data().map(projection)
+	gl_data.push([width,gl_data[0][1]])
 
-	socket.on('connect',function(){
-		contact=[]
-	})
+	var greyline=d3.svg.area()
+		.interpolate("cardinal")
+		.x(function(d){return d[0]})
+		.y(function(d){return d[1]})
+		.y0(0)
+
+	svg.selectAll("path.greyline")
+		.datum(gl_data,function(d,i){return i})
+		.attr("d",greyline)
+
+	setTimeout(greylineTimer,60000);
+}
+
+draw_map(function(){
+
+	//---------------------------greyline
+	svg.append("path").attr("class","greyline")
+	greylineTimer()
 
 	//---------------------------band counts
 	svg.append("g")
@@ -300,6 +346,12 @@ draw_map(function(){
 		.text("Total Contacts")
 
 	//---------------------------socket.io handlers
+	var socket = io()
+
+	socket.on('connect',function(){
+		contact=[]
+	})
+
 	var oldcontacttimer=null
 	socket.on('oldcontact', function (data) {
 		processContact(data)
