@@ -7,6 +7,9 @@ var projection = d3.geo.mercator()
 		.translate([width / 2, height / 2])
 		.precision(.1)
 
+var path = d3.geo.path()
+		.projection(projection)
+
 var subsolarpoint=function(date){
 	if(!date) date=new Date();
 	JD=(date.getTime()/86400000.0)+2440587.5
@@ -24,22 +27,9 @@ var subsolarpoint=function(date){
 	]
 }
 
-var greyline_data=function(){
-	var p=d3.geo.mercator().center([0,0]).scale(180/Math.PI).translate([0,0])
-	ret=Array(30)
-	sp=subsolarpoint()
-	for(i=0;i<ret.length;i++){
-		x=i/(ret.length-1)*2-1
-		ret[i]=p.invert([
-			x*180,
-			Math.cos((x-sp[0]/180)*Math.PI)*90+sp[1]
-		])
-	}
-	return ret
+function antipode(position) {
+  return [position[0] + 180, -position[1]];
 }
-
-var path = d3.geo.path()
-		.projection(projection)
 
 var svg = d3.select("body").append("svg")
 		.attr("id","worldmap")
@@ -293,15 +283,13 @@ var refreshBandCounts=function(data){
 
 var greylineTimer=function(){
 
-	var greyline=d3.svg.area()
-		.interpolate("cardinal")
-		.x(function(d){return d[0]})
-		.y(function(d){return d[1]})
-		.y0(0)
+	svg.select("path.day")
+		.datum(d3.geo.circle().angle(90).origin(subsolarpoint()))
+		.attr("d",path)
 
-	svg.selectAll("path.greyline")
-		.datum(greyline_data().map(projection),function(d,i){return i})
-		.attr("d",greyline)
+	svg.select("path.night")
+		.datum(d3.geo.circle().angle(90-18).origin(antipode(subsolarpoint())))
+		.attr("d",path)
 
 	setTimeout(greylineTimer,60000);
 }
@@ -311,7 +299,8 @@ draw_map(function(){
 	svg.append("g").attr("class","lines")
 
 	//---------------------------greyline
-	svg.append("path").attr("class","greyline")
+	svg.append("path").attr("class","day")
+	svg.append("path").attr("class","night")
 	greylineTimer()
 
 	//---------------------------band counts

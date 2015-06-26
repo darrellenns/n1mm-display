@@ -42,10 +42,17 @@ text.total_contacts{
 	fill:red;
 }
 
-path.greyline{
+path.day{
 	stroke:yellow;
 	stroke-width:1;
-	stroke-opacity:0.5;
+	stroke-opacity:0.8;
 	fill:yellow;
+	fill-opacity:0.03;
+}
+path.night{
+	stroke:lightblue;
+	stroke-width:1;
+	stroke-opacity:0.8;
+	fill:lightblue;
 	fill-opacity:0.03;
 }
