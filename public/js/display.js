@@ -319,7 +319,7 @@ var greylineTimer=function(){
 		;
 
 	svg.select("path.night")
-		.datum(d3.geo.circle().angle(90-18).origin(antipode(sp)))
+		.datum(d3.geo.circle().angle(90-6).origin(antipode(sp)))
 		.attr("d",path)
 		;
 
