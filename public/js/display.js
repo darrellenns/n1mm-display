@@ -29,10 +29,10 @@ var greyline_data=function(){
 	ret=Array(30)
 	sp=subsolarpoint()
 	for(i=0;i<ret.length;i++){
-		x=i/(ret.length-1)
+		x=i/(ret.length-1)*2-1
 		ret[i]=p.invert([
-			x*360-180,
-			Math.cos(2*(x-sp[0]/360+0.5)*Math.PI)*90+sp[1]
+			x*180,
+			Math.cos((x-sp[0]/180)*Math.PI)*90+sp[1]
 		])
 	}
 	return ret
