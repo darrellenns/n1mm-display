@@ -73,7 +73,7 @@ var dxlog_addinfo=function(row,callback){
 		row.t=parseInt(row.t);
 		callback(row);
 	});
-};
+}
 
 //---------------------------------polling functions
 var seen=[];
