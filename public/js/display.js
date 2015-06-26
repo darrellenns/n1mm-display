@@ -283,12 +283,13 @@ var refreshBandCounts=function(data){
 
 var greylineTimer=function(){
 
+	var sp=subsolarpoint();
 	svg.select("path.day")
-		.datum(d3.geo.circle().angle(90).origin(subsolarpoint()))
+		.datum(d3.geo.circle().angle(90).origin(sp))
 		.attr("d",path)
 
 	svg.select("path.night")
-		.datum(d3.geo.circle().angle(90-18).origin(antipode(subsolarpoint())))
+		.datum(d3.geo.circle().angle(90-18).origin(antipode(sp)))
 		.attr("d",path)
 
 	setTimeout(greylineTimer,60000);
