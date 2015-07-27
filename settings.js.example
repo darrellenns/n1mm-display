@@ -22,3 +22,7 @@ exports.listenPort=3000;
 
 //Optionally, you can use a base64 encoded password as shown here (to mitigate casual glancing at the password)
 //exports.qrz_pass=new Buffer('Base64EncodedPasswordHere','base64').toString();
+
+//Or, you can have it prompt for the password on startup to avoid saving it at all
+//var readlineSync=require('readline-sync');
+//exports.qrz_pass=readlineSync.question('QRZ Password:',{hideEchoBack:true});
