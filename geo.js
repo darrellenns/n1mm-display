@@ -21,7 +21,12 @@ exports.init=function(callback){
 				row.Longitude*=-1;
 				prefixData[row.Prefix]=row;
 		},function(){
-			qrz.init(callback);
+			qrz.init(function(err,result){
+				if(err) {
+					console.log("QRZ Init Failed: "+err)
+				}
+					callback(null,result);
+			});
 		});
 	});
 	db.close();
